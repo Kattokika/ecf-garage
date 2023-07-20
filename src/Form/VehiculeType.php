@@ -34,6 +34,7 @@ class VehiculeType extends AbstractType
             ])
             ->add('couleur')
             ->add('puissance')
+            ->add('equipement')
             ->add('carburant', EntityType::class, [
                 // looks for choices from this entity
                 'class' => VehiculeCarburant::class,

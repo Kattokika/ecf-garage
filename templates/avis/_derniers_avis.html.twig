@@ -1,40 +1,25 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Avis index{% endblock %}
-
-{% block body %}
-    <h1>Derniers Avis</h1>
-
-    <h2>Notre moyenne {{ moyenne }}</h2>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Note</th>
-                <th>Nom</th>
-                <th>Date_visite</th>
-                <th>Titre</th>
-                <th>Commentaire</th>
-                <th>Reponse</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for avi in avis %}
-            <tr>
-                <td>{{ avi.note }}</td>
-                <td>{{ avi.nom }}</td>
-                <td>{{ avi.dateVisite ? avi.dateVisite|date('Y-m-d') : '' }}</td>
-                <td>{{ avi.titre }}</td>
-                <td>{{ avi.commentaire }}</td>
-                <td>{{ avi.reponse }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">Pas encore d'avis</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_avis_client') }}">Donner son avis</a>
-{% endblock %}
+{% for avi in avis %}
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title fw-bold">{{ avi.nom }}</h5>
+                <span>
+                    {% for i in range(1, 5) %}
+                        {% if i <= avi.note %}
+                            <i class="bi bi-star-fill"></i>
+                        {% else %}
+                            <i class="bi bi-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+            <div class="card-body">
+                <p class="card-text" style="min-height: 8em;">
+                    <strong>{{ avi.titre }}</strong><br>
+                    {{ avi.commentaire }}
+                </p>
+                <p class="card-subtitle">visite le {{ avi.dateVisite ? avi.dateVisite|date('Y-m-d') : '' }}</p>
+            </div>
+        </div>
+    </div>
+{% endfor %}

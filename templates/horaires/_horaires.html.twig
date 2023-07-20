@@ -1,0 +1,24 @@
+{% for horaire in horaires %}
+    <div class="d-flex align-items-center">
+        <div class="text-start" style="min-width: 140px;">{{ horaire.nomJour }}</div>
+        <div class="pb-1">
+            {% if horaire.ouverture == false %}
+                <div>
+                    Fermé
+                </div>
+            {% else %}
+                <div>
+                {% for slot in horaire.horaires|batch(2, 'Fermé') %}
+                    {% if slot[loop.index] != '00:00:00' %}
+                        <div>
+                            {{ slot ? slot|map(p => "#{p|slice(0, 5)}")|join(' à ') : ''}}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <div>Pas d'horaires enregistrées</div>
+{% endfor %}

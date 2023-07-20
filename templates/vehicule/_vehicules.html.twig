@@ -1,0 +1,37 @@
+<div class="row g-3 p-3">
+    {% for vehicule in vehicules %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                {% set picture_path = attribute(vehicule.thumbnail, 'filename') is defined ? 'uploads/photos/' ~ vehicule.thumbnail.filename : 'assets/placeholder.png' %}
+                <img src="{{ asset(picture_path) }}" class="card-img-top shadow border-0 object-fit-cover"
+                     style="aspect-ratio: 4 / 3;" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ vehicule.marque }} {{ vehicule.modele }}</h5>
+                </div>
+                <ul class="list-group list-group-flush text-start">
+                    <li class="list-group-item d-flex">
+                        <span class="w-50" style="width: 50%;">Km: {{ vehicule.kilometre }}</span>
+                        <span class="w-50" style="width: 50%;">Type: {{ vehicule.carburant.type }}</span>
+                    </li>
+                    <li class="list-group-item d-flex">
+                        <span class="w-50">Année: {{ vehicule.annee }}</span>
+                        <span class="w-50">Boîte: {{ vehicule.boite }}</span>
+                    </li>
+                    <li class="list-group-item d-flex">
+                        <span class="w-50">Puissance: {{ vehicule.puissance }}cv</span>
+                        <span class="w-50">Prix: <strong>{{ vehicule.prix }} €</strong></span>
+                    </li>
+                </ul>
+                {% if route_name is defined %}
+                <div class="py-2">
+                    <a href="{{ path(route_name, {'slug': vehicule.slug}) }}">
+                        <button class="btn btn-primary">{{ button_name|default('En savoir plus') }}</button>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <span class="fs-3">Pas de véhicule disponible.</span>
+    {% endfor %}
+</div>

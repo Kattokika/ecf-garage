@@ -34,7 +34,7 @@
                                 </li>
                             {% endfor %}
                             <li>
-                                <a class="btn btn-outline-secondary" href="{{ path('app_login') }}" role="button">
+                                <a class="btn btn-secondary" href="{{ path('app_login') }}" role="button">
                                     Espace Pro
                                 </a>
                             </li>
@@ -58,8 +58,8 @@
     {% endblock %}
     {% block footer %}
 
-        <footer class="footer-distributed ">
-            <div class="footer-left ">
+        <footer class="footer-distributed d-flex align-items-center">
+            <div class="footer-left">
                 <a class="logo" href="{{ path('app_homepage') }}">
                     <img src="{{ asset('assets/logo-garage.png') }}" style="width: 150px;" alt="logo-garage"/>
                 </a>
@@ -81,9 +81,9 @@
                 </div>
             </div>
 
-            <div class="footer-right">
+            <div class="footer-right d-flex justify-content-center">
                 <div>
-                    <p>horaires</p>
+                    {{ render(controller('App\\Controller\\HorairesController::horaires')) }}
                 </div>
             </div>
         </footer>

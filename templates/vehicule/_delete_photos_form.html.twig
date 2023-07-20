@@ -1,8 +1,16 @@
 {{ form_start(form) }}
     {% for photo in form.pictures %}
-        <li>{{ form_row(photo) }}</li>
-        <img src="{{ asset('uploads/photos/' ~ vehicule.photos[loop.index0].filename) }}" alt="test" height="50px" style="display: inline-block"/>
+        {% set isThumbnail = vehicule.thumbnail.id == photo.vars.value %}
+        <div class="col-3">
+            {{ form_row(photo, { label: isThumbnail ? 'Miniature (utilisée)' : 'Supprimer', disabled: isThumbnail }) }}
+            <img src="{{ asset('uploads/photos/' ~ vehicule.photos[loop.index0].filename) }}" alt="test" class="w-100 object-fit-cover" style="aspect-ratio: 4 / 3"/>
+        </div>
     {% endfor %}
     {{ form_errors(form) }}
-    <button class="btn">{{ button_label|default('Supprimer les photos selectionnées') }}</button>
+    <div class="row pt-3">
+        <div class="col">
+            <a href="{{ path('app_vehicule_edit', { slug: vehicule.slug }) }}" class="btn btn-primary me-2">Annuler</a>
+            <button class="btn btn-danger" onsubmit="return confirm('Are you sure you want to delete this item?');">{{ button_label|default('Supprimer les photos selectionnées') }}</button>
+        </div>
+    </div>
 {{ form_end(form) }}

@@ -1,16 +1,10 @@
 {% extends 'layout_pro.html.twig' %}
 
-{% block title %}New Vehicule{% endblock %}
+{% block title %}Ajouter un véhicule{% endblock %}
 
-{% block body %}
-    <h1>Create new Vehicule</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-8">
-                {{ include('vehicule/_form.html.twig') }}
-
-                <a href="{{ path('app_vehicule_index') }}">back to list</a>
-            </div>
-        </div>
+{% block content %}
+    <h1 class="text-center p-3">Ajouter un véhicule</h1>
+    <div class="row g-3 p-3">
+        {{ include('vehicule/_create_edit_form.html.twig', { cancel_button: true }) }}
     </div>
 {% endblock %}

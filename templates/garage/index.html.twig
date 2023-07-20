@@ -5,11 +5,11 @@
 {% block main %}
     <main class="container-fluid p-3">
         <div class="d-md-flex justify-content-center p-3">
-            <div id="carouselGarage" class="carousel slide">
+            <div id="carouselGarage" class="carousel slide w-100">
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselGarage" data-bs-slide-to="0" class="active"
                             aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselGarage" data-bs-slide-to="1"
+                    <button type="button" data-bs-target="#carouselGarage" data-bss-slide-to="1"
                             aria-label="Slide 2"></button>
                     <button type="button" data-bs-target="#carouselGarage" data-bs-slide-to="2"
                             aria-label="Slide 3"></button>
@@ -51,98 +51,65 @@
         </div>
 
         <div class="p-3">
-            <div class="card text-center" style="width: 15rem; background-color: #b7b5b7;">
-                <div class="card-header">
-                    <h5 class="card-title fw-bold">Prestation 1</h5>
+            <div class="text-center">
+                <h2>DÉCOUVREZ LES PRESTATIONS PROPOSÉES PAR LES RÉPARATEURS DU GARAGE V.PARROT</h2>
+                <span class="fs-5">Nos réparateurs s’occupent de la réparation et l’entretien de votre voiture, peu importe la marque
+                    ou le modèle de celle-ci.
+                    <br>Profitez d’une prestation de qualité effectuée par des véritables experts auto.
+                </span>
+            </div>
+        </div>
+        <div class="d-md-flex justify-content-center p-3" style="background-color: #24393e;">
+            <div id="carouselServices" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                        {{ render(controller('App\\Controller\\ServiceController::services')) }}
                 </div>
-                <div class="card-body">
-                    <p class="card-text">Description de cette prestation un peu longue mais pas tant que ça, faut pas
-                        abuser. c'est juste une description, pas un roman</p>
-                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselServices"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselServices"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
 
         <div class="trouver-voiture p-3">
             <h2 class="text-center">Trouvez votre voiture</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="card mb-3 mr-1" style="max-width: 340px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="images-site/modele.jpg" class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Modele voiture 1</h5>
-                                    <p class="card-text">Km</p>
-                                    <p class="card-text">Année</p>
-                                    <p class="card-text">Prix</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col">
-                    <div class="card mb-3" style="max-width: 340px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="images-site/modele.jpg" class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Modele voiture 2</h5>
-                                    <p class="card-text">Km</p>
-                                    <p class="card-text">Année</p>
-                                    <p class="card-text">Prix</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card mb-3 ml-1" style="max-width: 340px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="images-site/modele.jpg" class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Modele voiture 3</h5>
-                                    <p class="card-text">Km</p>
-                                    <p class="card-text">Année</p>
-                                    <p class="card-text">Prix</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="d-md-flex justify-content-md-end">
-                <a class="btn btn-secondary me-md-2" href="liste-voitures.html" role="button">Voir plus</a>
+            {{ render(controller('App\\Controller\\VehiculeController::vehicules', {max: 3})) }}
+
+            <div class="d-md-flex justify-content-center pt-3">
+                <a class="btn btn-primary btn-lg me-md-3" href="{{ path("app_vehicule_index") }}" role="button">Voir plus</a>
             </div>
         </div>
 
         <div class="p-3">
             <h2 class="text-center">Nos clients nous recommandent</h2>
-            <div class="text-center">
-                <p>note moyenne</p>
+            <div class="text-center fs-4">
+                <div class="fs-4">{{ note_moyenne }} / 5</div>
+
+                {% set rounded_note = note_moyenne|round %}
+                {% set star = 'fill' %}
+                {% for i in range(1, 5) %}
+                    {% if i < rounded_note %}
+                        {% set star = '-fill' %}
+                    {% elseif rounded_note < i < note_moyenne %}
+                        {% set star = '-half' %}
+                    {% else %}
+                        {% set star = '' %}
+                    {% endif %}
+                    <i class="bi bi-star{{ star }}"></i>
+                {% endfor %}
             </div>
-            <div class="p-3">
-                <div class="card" style="width: 18rem; background-color: #b7b5b7;">
-                    <div class="card-header">
-                        <h5 class="card-title fw-bold">Nom</h5>
-                        <p>Etoiles etoiles</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">commentaire lié à l'avis client</p>
-                        <p class="card-subtitle">Date de l'avis</p>
-                    </div>
-                </div>
+            <div class="row p-3">
+                {{ render(controller('App\\Controller\\AvisController::derniers_avis', {max: 4})) }}
             </div>
             <div class="d-md-flex justify-content-center p-3">
-                <a class="btn btn-secondary" href="#" role="button">Voir les avis</a>
-                <a class="btn btn-secondary" href="{{ path('app_avis_client') }}" role="button">Laisser votre avis</a>
+                <a class="btn btn-primary btn-lg" href="{{ path('app_avis_client') }}" role="button">Laisser votre avis</a>
             </div>
         </div>
     </main>

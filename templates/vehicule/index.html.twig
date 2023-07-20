@@ -1,6 +1,6 @@
 {% extends 'layout_pro.html.twig' %}
 
-{% block title %}Vehicule index{% endblock %}
+{% block title %}Liste des véhicules{% endblock %}
 
 {% set queryParams = app.request.query.all %}
 {% block content %}
@@ -11,66 +11,87 @@
             form.addEventListener('change', function () {
                 pageField.value = '1';
             });
+            const resetButton = document.querySelector('#buttonReset')
+
+            resetButton.addEventListener('click', function () {
+                form.querySelectorAll('input[type=number]').forEach(elmt => {
+                    elmt.setAttribute('value', null);
+                })
+            })
         }
     </script>
-    <h1>Vehicule index</h1>
-    <div>There are {{ vehicules|length }} vehicules.</div>
-    <div class="row">
-        <div class="col-6">
+    <h1 class="text-center p-3">Liste des véhicules</h1>
+    <div class="row text-end px-3">
+        <a href="{{ path('app_vehicule_new') }}">
+        <button class="btn btn-primary">
+            + Ajouter un véhicule
+        </button>
+        </a>
+    </div>
+    <div class="text-center align-items-center">
+        <div class="p-3">
+            {% set map_fields = {
+                'prixMin': 'Prix Min',
+                'prixMax': 'Prix Max',
+                'anneeMin': 'Année Min',
+                'anneeMax': 'Année Max',
+                'kmMin': 'Kilomètrage Min',
+                'kmMax': 'Kilomètrage Max',
+            } %}
             {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <button type="submit">Test</button>
+            <div class="row text-start">
+                {% for row in map_fields|batch(2, '-', true) %}
+                    <div class="col">
+                        <div>
+                            <p>{{ row|last|split(' ')|first }}</p>
+                        </div>
+                        <div class="row">
+                            {% for fieldName, fieldLabel in row %}
+                                {% set prixMin = attribute(form, fieldName) %}
+                                <div class="col">
+                                    <label
+                                            for={{ field_name(prixMin) }}
+                                            class="form-label"
+                                            hidden
+                                    >
+                                        Prix Min
+                                    </label>
+                                    <input
+                                            type="number"
+                                            class="form-control"
+                                            id="{{ field_name(prixMin) }}"
+                                            name="{{ field_name(prixMin) }}"
+                                            placeholder="{{ fieldLabel }}"
+                                            value="{{ field_value(prixMin) }}"
+                                    >
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="p-3 text-center">
+                    <button type="reset" id="buttonReset" value="reset" class="btn btn-primary"
+                            style="width: 250px;">Réinitialiser la recherche
+                    </button>
+                    <button type="submit" value="submit" class="btn btn-primary" style="width: 250px;">Filtrer la
+                        recherche
+                    </button>
+                </div>
+            </div>
             {{ form_end(form) }}
         </div>
+        {{ include('vehicule/_vehicules.html.twig', { route_name: 'app_vehicule_edit', button_name: 'Modifier'}) }}
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Marque</th>
-                <th>Modele</th>
-                <th>Kilometre</th>
-                <th>Prix</th>
-                <th>Annee</th>
-                <th>Boite</th>
-                <th>Portes</th>
-                <th>Couleur</th>
-                <th>Puissance</th>
-                <th>Carburant</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for vehicule in vehicules %}
-            <tr>
-                <td>{{ vehicule.marque }}</td>
-                <td>{{ vehicule.modele }}</td>
-                <td>{{ vehicule.kilometre }}</td>
-                <td>{{ vehicule.prix }}</td>
-                <td>{{ vehicule.annee }}</td>
-                <td>{{ vehicule.boite }}</td>
-                <td>{{ vehicule.portes }}</td>
-                <td>{{ vehicule.couleur }}</td>
-                <td>{{ vehicule.puissance }}</td>
-                <td>{{ vehicule.carburant.type }}</td>
-                <td>
-                    <a href="{{ path('app_vehicule_show', {'slug': vehicule.slug}) }}">show</a>
-                    <a href="{{ path('app_vehicule_edit', {'slug': vehicule.slug}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="12">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    {% if previous >= 1 %}
-        <a href="{{ path('app_vehicule_index', queryParams|merge({page: previous})) }}">Previous</a>
-    {% endif %}
-    {% if next != 0 %}
-        <a href="{{ path('app_vehicule_index', queryParams|merge({page: next})) }}">Next</a>
-    {% endif %}
-
-    <a href="{{ path('app_vehicule_new') }}">Create new</a>
+    <div class="d-flex justify-content-between">
+        <div>
+            {% if previous >= 1 %}
+                <a href="{{ path('app_vehicule_index_pro', queryParams|merge({page: previous})) }}" class="btn btn-primary">Précedente</a>
+            {% endif %}
+        </div>
+        <div>
+            {% if next != 0 %}
+                <a href="{{ path('app_vehicule_index_pro', queryParams|merge({page: next})) }}" class="btn btn-primary">Suivante</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

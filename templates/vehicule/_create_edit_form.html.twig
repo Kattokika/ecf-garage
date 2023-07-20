@@ -1,0 +1,51 @@
+{{ form_start(form) }}
+        {% set map_label = {
+            'modele': 'Modèle',
+            'annee': 'Année de mise en circulation',
+            'kilometre': 'Kilomètrage',
+            'boite': 'Boîte',
+        } %}
+<div class="row">
+    {% set hasThumbnail = attribute(form, 'thumbnail') is defined %}
+    <div class="col-12 order-1">
+        {{ form_row(form.equipement, { label: 'Equipement et options'}) }}
+    </div>
+    {% if hasThumbnail %}
+    <div class="col-12 order-2">
+        <span>Sélectionner la miniature</span>
+        <div class="row g-2">
+            {% for photo in form.thumbnail %}
+                <div class="col-2">
+                    {{ form_row(photo, { label: "Photo #{loop.index}" }) }}
+                    <img src="{{ asset('uploads/photos/' ~ vehicule.photos[loop.index0].filename) }}" alt="test" style="aspect-ratio: 4 / 3" class="object-fit-cover w-100"/>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% for row in form.children %}
+        {% set isEquipement = row is same as(form.equipement) %}
+        {% set isThumbnail = (hasThumbnail and row is same as(form.thumbnail)) %}
+        {{ isEquipement }} {{ isThumbnail }}
+        {% if not isEquipement and not isThumbnail %}
+            <div class="col-md-6 order-0">
+                {% if row.vars.name in map_label|keys %}
+                    {{ form_row(row, { label: map_label[row.vars.name]}) }}
+                {% else %}
+                    {{ form_row(row) }}
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class="pt-3">
+    <div class="col-6">
+        {% if cancel_button|default(false) %}
+            <a href="{{ path('app_vehicule_index_pro') }}" class="btn btn-danger">
+                Annuler
+            </a>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">{{ button_label|default('Etape suivante') }}</button>
+    </div>
+</div>
+{{ form_end(form) }}

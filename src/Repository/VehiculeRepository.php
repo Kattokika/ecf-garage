@@ -18,7 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VehiculeRepository extends ServiceEntityRepository
 {
-    public const VEHICULES_PER_PAGE = 2;
+    public const VEHICULES_PER_PAGE = 4;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Vehicule::class);
@@ -60,6 +60,19 @@ class VehiculeRepository extends ServiceEntityRepository
         $condition = 'v.'.$field.' '.$predicate.' :'.$key;
         $builder->andWhere($condition)
             ->setParameter($key, $value);
+    }
+
+    /**
+     * @return Vehicule[] Returns an array of Vehicule objects
+     */
+    public function findAllWithLimit(int $max): array
+    {
+        return $this->createQueryBuilder('v')
+            ->orderBy('v.updatedAt', 'DESC')
+            ->setMaxResults($max)
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
 //    /**

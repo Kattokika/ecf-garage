@@ -26,6 +26,7 @@
         "@uppy/dashboard": "^3.4.2",
         "@uppy/form": "^3.0.2",
         "@uppy/image-editor": "^2.1.2",
+        "@uppy/locales": "^3.2.3",
         "@uppy/xhr-upload": "^3.3.1"
     }
 }

@@ -75,6 +75,9 @@ class Vehicule
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $equipement = null;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -292,6 +295,18 @@ class Vehicule
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getEquipement(): ?string
+    {
+        return $this->equipement;
+    }
+
+    public function setEquipement(?string $equipement): static
+    {
+        $this->equipement = $equipement;
 
         return $this;
     }

@@ -1,0 +1,20 @@
+{% for service_row in services|batch(3) %}
+    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+        <div class="cards-wrapper row">
+            {% for service in service_row %}
+            <div class="card card-service shadow border-0 col-md-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ service.nom }}</h5>
+                    <p class="card-text">
+                        {{ service.description }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+<div>
+    Pas de service encore configuré
+</div>
+{% endfor %}

@@ -33,7 +33,7 @@ class AvisRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.status = :status')
             ->setParameter('status', $status)
-            ->orderBy('a.date_visite', 'ASC')
+            ->orderBy('a.date_visite', 'DESC')
             ->setMaxResults($max)
             ->getQuery()
             ->getResult()
@@ -63,7 +63,7 @@ class AvisRepository extends ServiceEntityRepository
     /**
      * @return int Returns the average of Avis 'note' where the 'status' is "accepted"
      */
-    public function getAverageRate(): int
+    public function getAverageRate(): float
     {
         $entityManager = $this->getEntityManager();
 
@@ -75,7 +75,7 @@ class AvisRepository extends ServiceEntityRepository
 
         // returns the average of Avis 'note' where the status is "accepted"
         try {
-            return (int)$query->getSingleScalarResult();
+            return (float)$query->getSingleScalarResult();
         } catch (NoResultException|NonUniqueResultException $e) {
             return 0;
         }

@@ -19,9 +19,11 @@
             {% set menu_entries = menu_entries|slice(0, 4) %}
         {% endif %}
         <div class="d-flex flex-nowrap">
-            <aside class="d-flex flex-column flex-shrink-0 p-3" style="width: 280px; height: 100vh; background-color: #24393e;">
+            <aside class="d-flex flex-column flex-shrink-0 p-3" style="width: 280px; min-height: 100vh; background-color: #24393e;">
                 <div class="d-flex justify-content-center mb-3 mb-md-0">
-                    <img src="{{ asset('assets/logo-garage.png') }}" style="width: 120px;"  alt="logo-garage" />
+                    <a href="{{ path('app_homepage') }}">
+                        <img src="{{ asset('assets/logo-garage.png') }}" style="width: 120px;"  alt="logo-garage" />
+                    </a>
                 </div>
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">

@@ -47,11 +47,37 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-    #[Route('/espace-pro/vehicules', name: 'app_vehicule_index_pro', methods: ['GET'])]
-    public function index_pro(VehiculeRepository $vehiculeRepository): Response
+    #[Route('/vehicules/{slug}', name: 'app_vehicule_show', methods: ['GET'])]
+    public function show(Vehicule $vehicule): Response
     {
+        return $this->render('vehicule/show_client.html.twig', [
+            'vehicule' => $vehicule,
+        ]);
+    }
+
+    #[Route('/espace-pro/vehicules', name: 'app_vehicule_index_pro', methods: ['GET'])]
+    public function index_pro(Request $request, VehiculeRepository $vehiculeRepository): Response
+    {
+        $form = $this->createForm(FilterVehiculeType::class, null, [
+            'action' => $this->generateUrl('app_vehicule_index'),
+            'method' => 'GET',
+        ]);
+        $form->handleRequest($request);
+        $page = $request->query->get('page', 1);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $paginator = $vehiculeRepository->getVehiculePaginator($form->getData());
+        } else {
+            $paginator = $vehiculeRepository->getVehiculePaginator([
+                'page' => $page,
+            ]);
+        }
+        $next = count($paginator) < VehiculeRepository::VEHICULES_PER_PAGE * $page + 1 ? 0 : $page + 1;
         return $this->render('vehicule/index.html.twig', [
-            'vehicules' => $vehiculeRepository->findAll(),
+            'vehicules' => $paginator,
+            'form' => $form,
+            'previous' => $page - 1,
+            'next' => $next,
         ]);
     }
 
@@ -88,24 +114,22 @@ class VehiculeController extends AbstractController
              $pictureFile = $form->get('picture')->getData();
              if (!$pictureFile) {
                  return $this->json(['data' => [
-                     "empty?"
-                 ]]);
+                     "error"=> "File is empty",
+                 ]], Response::HTTP_BAD_REQUEST);
              }
 
              $pictureFilename = $fileManager->upload($pictureFile);
              $vehiculePhoto->setFilename($pictureFilename);
              $vehiculePhoto->setVehicule($vehicule);
              $entityManager->persist($vehiculePhoto);
+             if (!$vehicule->getThumbnail()) {
+                 $vehicule->setThumbnail($vehiculePhoto);
+             }
              $entityManager->flush();
 
              return $this->json(['data' => [
-                 # $form->isSubmitted(),
-                 # $file,
-                 "testdata, should be good?",
                  $pictureFilename,
              ]]);
-
-             # return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
          }
 
         return $this->render('vehicule/new_photos.html.twig', [
@@ -162,23 +186,6 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-
-    #[Route('/vehicules/{slug}', name: 'app_vehicule_show', methods: ['GET'])]
-    public function show(Vehicule $vehicule): Response
-    {
-        return $this->render('vehicule/show.html.twig', [
-            'vehicule' => $vehicule,
-        ]);
-    }
-
-    #[Route('/espace-pro/vehicules/{slug}', name: 'app_vehicule_show_pro', methods: ['GET'])]
-    public function show_pro(Vehicule $vehicule): Response
-    {
-        return $this->render('vehicule/show.html.twig', [
-            'vehicule' => $vehicule,
-        ]);
-    }
-
     #[Route('/espace-pro/vehicules/{slug}/edit', name: 'app_vehicule_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager): Response
     {
@@ -187,8 +194,7 @@ class VehiculeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_vehicule_index_pro', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('vehicule/edit.html.twig', [
@@ -220,5 +226,17 @@ class VehiculeController extends AbstractController
             $fileManager->remove($filenames);
         }
         return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    public function vehicules(VehiculeRepository $vehiculeRepository, ?int $max): Response
+    {
+        if ($max) {
+            $vehicules = $vehiculeRepository->findAllWithLimit($max);
+        } else {
+            $vehicules = $vehiculeRepository->findAll();
+        }
+        return $this->render('vehicule/_vehicules.html.twig', [
+            'vehicules' => $vehicules,
+        ]);
     }
 }
