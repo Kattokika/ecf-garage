@@ -22,22 +22,28 @@ use Symfony\Component\Form\FormError;
 class VehiculeController extends AbstractController
 {
     #[Route('/vehicules', name: 'app_vehicule_index', methods: ['GET'])]
-    public function index(VehiculeRepository $vehiculeRepository): Response
+    public function index(Request $request, VehiculeRepository $vehiculeRepository): Response
     {
-        $form = $this->createForm(FilterVehiculeType::class);
-        if ($form->isSubmitted() && $form->isValid()) {
-            # $queryBuilder = $vehiculeRepository->createQueryBuilder();
-            # $queryBuilder
-
-            $vehicule = $vehiculeRepository->findAll();
-
+        $form = $this->createForm(FilterVehiculeType::class, null, [
+            'action' => $this->generateUrl('app_vehicule_index'),
+            'method' => 'GET',
+        ]);
+        $form->handleRequest($request);
+        $page = $request->query->get('page', 1);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $paginator = $vehiculeRepository->getVehiculePaginator($form->getData());
         } else {
-            $vehicule = $vehiculeRepository->findAll();
+            $paginator = $vehiculeRepository->getVehiculePaginator([
+                'page' => $page,
+            ]);
         }
-
+        $next = count($paginator) < VehiculeRepository::VEHICULES_PER_PAGE * $page + 1 ? 0 : $page + 1;
         return $this->render('vehicule/index.html.twig', [
-            'vehicules' => $vehicule,
+            'vehicules' => $paginator,
             'form' => $form,
+            'previous' => $page - 1,
+            'next' => $next,
         ]);
     }
 

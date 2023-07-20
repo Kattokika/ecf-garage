@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Vehicule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,9 +18,48 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VehiculeRepository extends ServiceEntityRepository
 {
+    public const VEHICULES_PER_PAGE = 2;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Vehicule::class);
+    }
+
+
+    public function getVehiculePaginator(array $filters = []): Paginator
+    {
+        if (!array_key_exists("page", $filters)) {
+            $filters['page'] = 1;
+        }
+
+        $offset = ($filters['page'] - 1) * self::VEHICULES_PER_PAGE;
+        $builder = $this->createQueryBuilder('v')
+            ->orderBy('v.updatedAt', 'DESC')
+            ->setMaxResults(self::VEHICULES_PER_PAGE)
+            ->setFirstResult($offset)
+        ;
+
+        foreach ($filters as $key => $value) {
+            $this->addCondition($builder, $key, $value);
+        }
+        return new Paginator($builder->getQuery());
+    }
+
+    private function addCondition(QueryBuilder $builder, string $key, ?string $value): void
+    {
+        # si la valeur est nulle ou une string vide, return
+        if (!$value) return;
+
+        if (str_ends_with($key, "Max")) {
+            $predicate = '<=';
+        } elseif (str_ends_with($key, "Min")){
+            $predicate = '>=';
+        } else return;
+
+        $field = substr($key, 0, -3);
+
+        $condition = 'v.'.$field.' '.$predicate.' :'.$key;
+        $builder->andWhere($condition)
+            ->setParameter($key, $value);
     }
 
 //    /**

@@ -11,7 +11,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-# TODO: add missing fields for vehicule
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
 #[UniqueEntity('slug')]
 class Vehicule
@@ -45,6 +44,7 @@ class Vehicule
     private ?int $prix = null;
 
     #[Assert\GreaterThan(1900)]
+    #[Assert\LessThan(2100)]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $annee = null;
     #[Assert\Choice(
@@ -65,11 +65,15 @@ class Vehicule
     private ?string $couleur = null;
 
     #[Assert\PositiveOrZero]
+    #[Assert\LessThan(2000)]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $puissance = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'], orphanRemoval: true)]
     private ?VehiculePhoto $thumbnail = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
@@ -276,6 +280,18 @@ class Vehicule
     public function setThumbnail(?VehiculePhoto $thumbnail): static
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

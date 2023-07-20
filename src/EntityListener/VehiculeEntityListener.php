@@ -17,13 +17,15 @@ class VehiculeEntityListener
     ) {
     }
 
-    public function prePersist(Vehicule $conference, LifecycleEventArgs $event): void
+    public function prePersist(Vehicule $vehicule, LifecycleEventArgs $event): void
     {
-        $conference->computeSlug($this->slugger);
+        $vehicule->computeSlug($this->slugger);
+        $vehicule->setUpdatedAt(new \DateTimeImmutable('now'));
     }
 
-    public function preUpdate(Vehicule $conference, LifecycleEventArgs $event): void
+    public function preUpdate(Vehicule $vehicule, LifecycleEventArgs $event): void
     {
-        $conference->computeSlug($this->slugger);
+        $vehicule->computeSlug($this->slugger);
+        $vehicule->setUpdatedAt(new \DateTimeImmutable('now'));
     }
 }

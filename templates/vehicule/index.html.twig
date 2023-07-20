@@ -2,11 +2,25 @@
 
 {% block title %}Vehicule index{% endblock %}
 
+{% set queryParams = app.request.query.all %}
 {% block body %}
+    <script>
+        window.onload = function () {
+            const form = document.querySelector('form');
+            const pageField = document.querySelector('#page')
+            form.addEventListener('change', function () {
+                pageField.value = '1';
+            });
+        }
+    </script>
     <h1>Vehicule index</h1>
+    <div>There are {{ vehicules|length }} vehicules.</div>
     <div class="row">
         <div class="col-6">
+            {{ form_start(form) }}
             {{ form_widget(form) }}
+            <button type="submit">Test</button>
+            {{ form_end(form) }}
         </div>
     </div>
     <table class="table">
@@ -50,6 +64,13 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {% if previous >= 1 %}
+        <a href="{{ path('app_vehicule_index', queryParams|merge({page: previous})) }}">Previous</a>
+    {% endif %}
+    {% if next != 0 %}
+        <a href="{{ path('app_vehicule_index', queryParams|merge({page: next})) }}">Next</a>
+    {% endif %}
 
     <a href="{{ path('app_vehicule_new') }}">Create new</a>
 {% endblock %}
