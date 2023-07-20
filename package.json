@@ -20,5 +20,12 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "@uppy/core": "^3.3.1",
+        "@uppy/dashboard": "^3.4.2",
+        "@uppy/form": "^3.0.2",
+        "@uppy/image-editor": "^2.1.2",
+        "@uppy/xhr-upload": "^3.3.1"
     }
 }

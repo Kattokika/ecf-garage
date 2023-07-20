@@ -3,13 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Vehicule;
+use App\Entity\VehiculePhoto;
 use App\Form\VehiculeType;
+use App\Form\VehiculePhotoType;
 use App\Repository\VehiculeRepository;
+use App\Service\FileUploader;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function PHPUnit\Framework\throwException;
 
 class VehiculeController extends AbstractController
 {
@@ -48,6 +54,49 @@ class VehiculeController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/espace-pro/vehicules/{slug}/photos', name: 'app_vehicule_new_photos', methods: ['GET', 'POST'])]
+    public function new_photos(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    {
+        $vehiculePhoto = new VehiculePhoto();
+        $vehiculePhoto->setVehicule($vehicule);
+        $form = $this->createForm(VehiculePhotoType::class, $vehiculePhoto);
+        $form->handleRequest($request);
+
+         if ($form->isSubmitted() && $form->isValid()) {
+             /** @var UploadedFile $brochureFile */
+             $pictureFile = $form->get('picture')->getData();
+             if (!$pictureFile) {
+                 return $this->json(['data' => [
+                     "empty?"
+                 ]]);
+             }
+
+             $pictureFilename = $fileUploader->upload($pictureFile);
+             $vehiculePhoto->setFilename($pictureFilename);
+             $vehiculePhoto->setVehicule($vehicule);
+             $vehiculePhoto->setPrincipale(false);
+             $entityManager->persist($vehiculePhoto);
+             $entityManager->flush();
+
+             return $this->json(['data' => [
+                 # $form->isSubmitted(),
+                 # $file,
+                 "testdata, should be good?",
+                 $pictureFilename,
+             ]]);
+             # $entityManager->persist($vehicule);
+             # $entityManager->flush();
+
+             # return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
+         }
+
+        return $this->render('vehicule/new_photos.html.twig', [
+            'vehicule' => $vehicule,
+            'form' => $form,
+        ]);
+    }
+
 
     #[Route('/vehicules/{slug}', name: 'app_vehicule_show', methods: ['GET'])]
     public function show(Vehicule $vehicule): Response
