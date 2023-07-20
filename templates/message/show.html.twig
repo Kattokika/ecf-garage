@@ -1,48 +1,24 @@
-{% extends 'layout.html.twig' %}
+{% extends 'layout_pro.html.twig' %}
 
-{% block title %}Message{% endblock %}
+{% block title %}Message {{ message.sujet }}{% endblock %}
 
-{% block body %}
-    <h1>Message</h1>
+{% block content %}
+    <h1 class="text-center p-3">Message client</h1>
+    <div class="text-start">
+        <ul>
+            <li>Nom: {{ message.nom }}</li>
+            <li>Envoyé à: {{ message.sentAt ? message.sentAt|date('Y-m-d H:i:s', 'Europe/Paris') : '' }}</li>
+            <li>Mail: {{ message.email }}</li>
+            <li>Numéro de téléphone: {{ message.telephone }}</li>
+            <li><strong>Sujet: {{ message.sujet }}</strong></li>
+        </ul>
+        <hr>
+        <p>{{ message.message }}</p>
+        <hr>
+    </div>
+    <div class="d-flex justify-content-between">
+        <a href="{{ path('app_message_index') }}" class="btn btn-primary">Retour aux messages</a>
+        {{ include('message/_delete_form.html.twig') }}
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ message.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ message.nom }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ message.email }}</td>
-            </tr>
-            <tr>
-                <th>Telephone</th>
-                <td>{{ message.telephone }}</td>
-            </tr>
-            <tr>
-                <th>Sujet</th>
-                <td>{{ message.sujet }}</td>
-            </tr>
-            <tr>
-                <th>Message</th>
-                <td>{{ message.message }}</td>
-            </tr>
-            <tr>
-                <th>Envoyé à </th>
-                <td>{{ message.sentAt ? message.sentAt|date('Y-m-d H:i:s', 'Europe/Paris') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Lu</th>
-                <td>{{ message.lu ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_message_index') }}">back to list</a>
-
-    {{ include('message/_delete_form.html.twig') }}
 {% endblock %}

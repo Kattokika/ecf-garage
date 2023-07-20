@@ -23,7 +23,7 @@
                 <th scope="row">{{ user.prenom }}</th>
                 <td>{{ user.poste }}</td>
                 <td>{{ user.email }}</td>
-                <td><a href="{{ path('app_user', { id: user.id }) }}" class="btn btn-primary">Modifier</a></td>
+                <td class="d-md-flex justify-content-md-end"><a href="{{ path('app_user', { id: user.id }) }}" class="btn btn-primary">Modifier</a></td>
             </tr>
         {% endfor %}
         </tbody>

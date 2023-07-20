@@ -26,6 +26,7 @@ class MessageController extends AbstractController
                 'label_attr' => [
                     'class' => 'checkbox-switch',
                 ],
+                'label' => 'Masquer messages lus'
             ])
             ->add('page', HiddenType::class, [
                 'required'=> false,

@@ -1,4 +1,16 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="row g-3 p-3">
+        {{ form_widget(form) }}
+        <div class="d-flex">
+        <div class="flex-fill">
+        <a href="{{ path('app_service_index')}}" class="btn btn-danger me-3" style="width: 120px;">Annuler</a>
+        <button type="submit" class="btn btn-primary" style="width: 120px;">{{ button_label|default('Save') }}</button>
+        </div>
+        {% if delete_button|default(false) %}
+            <div>
+            {{ include('service/_delete_form.html.twig') }}
+            </div>
+        {% endif %}
+        </div>
+    </div>
 {{ form_end(form) }}

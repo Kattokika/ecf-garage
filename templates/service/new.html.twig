@@ -1,11 +1,10 @@
 {% extends 'layout_pro.html.twig' %}
 
-{% block title %}New Service{% endblock %}
+{% block title %}Nouveau service{% endblock %}
 
-{% block body %}
-    <h1>Create new Service</h1>
+{% block content %}
+    <h1 class="text-center p-3">Nouveau service</h1>
 
-    {{ include('service/_form.html.twig') }}
+    {{ include('service/_form.html.twig', {'button_label': 'Créer'}) }}
 
-    <a href="{{ path('app_service_index') }}">back to list</a>
 {% endblock %}

@@ -1,9 +1,9 @@
 {% extends 'layout_pro.html.twig' %}
 
-{% block title %}Message index{% endblock %}
+{% block title %}Liste des messages{% endblock %}
 
 {% set queryParams = app.request.query.all %}
-{% block body %}
+{% block content %}
     <script>
         window.onload = function () {
             const pageField = document.querySelector('#form_showUnread')
@@ -15,51 +15,50 @@
         }
         // TODO: we can simply submit the format if the switch changes!!
     </script>
-    <h1>Message index</h1>
-    <div>There are {{ messages|length }} messages.</div>
+
+    <h1 class="text-center p-3">Liste des messages</h1>
     <div class="row">
         <div class="col-6">
             {{ form_start(form) }}
-            {{ form_widget(form) }}
+            {{ form_widget(form, {'label': 'Masquer les messages lus'}) }}
             {{ form_end(form) }}
         </div>
     </div>
-    <table class="table">
-        <thead>
+{#    <div class="form-check form-switch justify-content-end">#}
+{#        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">#}
+{#        <label class="form-check-label" for="flexSwitchCheckDefault">Masques les messages lus</label>#}
+{#    </div>#}
+    <div>
+        <table class="table">
+            <thead>
             <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Telephone</th>
-                <th>Sujet</th>
-                <th>Message</th>
-                <th>Lu</th>
-                <th>Envoyé à</th>
-                <th>actions</th>
+                <th scope="col">Status</th>
+                <th scope="col">Date</th>
+                <th scope="col">Nom client</th>
+                <th scope="col">Sujet</th>
+                <th scope="col"> </th>
             </tr>
-        </thead>
-        <tbody>
-        {% for message in messages %}
-            <tr>
-                <td>{{ message.id }}</td>
-                <td>{{ message.nom }}</td>
-                <td>{{ message.email }}</td>
-                <td>{{ message.telephone }}</td>
-                <td>{{ message.sujet }}</td>
-                <td>{{ message.message }}</td>
-                <td>{{ message.lu ? 'Yes' : 'No' }}</td>
-                <td>{{ message.sentAt ? message.sentAt|date('Y-m-d H:i:s', 'Europe/Paris') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_message_show', {'id': message.id}) }}">show</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for message in messages %}
+                <tr>
+                    <th scope="row">{{ message.lu ? 'Lu' : 'Non-lu' }}</th>
+                    <td>{{ message.sentAt ? message.sentAt|date('Y-m-d H:i', 'Europe/Paris') : '' }}</td>
+                    <td>{{ message.nom }}</td>
+                    <td>{{ message.sujet }}</td>
+                    <td class="d-md-flex justify-content-md-end">
+                        <a href="{{ path('app_message_show', {'id': message.id}) }}" class="btn btn-primary me-2">Ouvrir</a>
+                        {{ include('message/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Pas de messages</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     {% if previous >= 1 %}
         <a href="{{ path('app_message_index', queryParams|merge({page: previous})) }}">Previous</a>
