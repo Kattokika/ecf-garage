@@ -87,16 +87,4 @@ class Horaires
         return $this->horaires[$index];
     }
 
-
-//    public function addHoraires(string $horaire, int $index): static
-//    {
-//        $this->horaires[$index] = $horaire;
-//        return $this;
-//    }
-//
-//    public function removeHoraires(int $index): static
-//    {
-//        $this->horaires = array_splice($this->horaires, $index, 1);
-//        return $this;
-//    }
 }

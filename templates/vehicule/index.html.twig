@@ -1,13 +1,53 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Hello VehiculeController!{% endblock %}
+{% block title %}Vehicule index{% endblock %}
 
-{% block container %}
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% block body %}
+    <h1>Vehicule index</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/Users/benjaminsimon/Developer/php-projects/cef/project/garage_website/src/Controller/VehiculeController.php'|file_link(0) }}">src/Controller/VehiculeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/Users/benjaminsimon/Developer/php-projects/cef/project/garage_website/templates/vehicule/index.html.twig'|file_link(0) }}">templates/vehicule/index.html.twig</a></code></li>
-    </ul>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Slug</th>
+                <th>Marque</th>
+                <th>Modele</th>
+                <th>Kilometre</th>
+                <th>Prix</th>
+                <th>Annee</th>
+                <th>Boite</th>
+                <th>Portes</th>
+                <th>Couleur</th>
+                <th>Puissance</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vehicule in vehicules %}
+            <tr>
+                <td>{{ vehicule.id }}</td>
+                <td>{{ vehicule.slug }}</td>
+                <td>{{ vehicule.marque }}</td>
+                <td>{{ vehicule.modele }}</td>
+                <td>{{ vehicule.kilometre }}</td>
+                <td>{{ vehicule.prix }}</td>
+                <td>{{ vehicule.annee }}</td>
+                <td>{{ vehicule.boite }}</td>
+                <td>{{ vehicule.portes }}</td>
+                <td>{{ vehicule.couleur }}</td>
+                <td>{{ vehicule.puissance }}</td>
+                <td>
+                    <a href="{{ path('app_vehicule_show', {'id': vehicule.id}) }}">show</a>
+                    <a href="{{ path('app_vehicule_edit', {'id': vehicule.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_vehicule_new') }}">Create new</a>
 {% endblock %}
