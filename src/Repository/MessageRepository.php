@@ -19,7 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MessageRepository extends ServiceEntityRepository
 {
-    public const MESSAGES_PER_PAGE = 2;
+    public const MESSAGES_PER_PAGE = 10;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Message::class);
