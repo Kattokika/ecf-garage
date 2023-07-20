@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout_pro.html.twig' %}
 
 {% block title %}Vehicule index{% endblock %}
 
 {% set queryParams = app.request.query.all %}
-{% block body %}
+{% block content %}
     <script>
         window.onload = function () {
             const form = document.querySelector('form');

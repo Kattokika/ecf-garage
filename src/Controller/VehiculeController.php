@@ -27,7 +27,6 @@ class VehiculeController extends AbstractController
         $form = $this->createForm(FilterVehiculeType::class, null, [
             'action' => $this->generateUrl('app_vehicule_index'),
             'method' => 'GET',
-            'crsf'
         ]);
         $form->handleRequest($request);
         $page = $request->query->get('page', 1);
@@ -40,7 +39,7 @@ class VehiculeController extends AbstractController
             ]);
         }
         $next = count($paginator) < VehiculeRepository::VEHICULES_PER_PAGE * $page + 1 ? 0 : $page + 1;
-        return $this->render('vehicule/index.html.twig', [
+        return $this->render('vehicule/index_client.html.twig', [
             'vehicules' => $paginator,
             'form' => $form,
             'previous' => $page - 1,
