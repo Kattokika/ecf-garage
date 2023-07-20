@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Avis;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,15 +18,19 @@ class AvisType extends AbstractType
             $builder
                 ->add('note', ChoiceType::class, [
                     'choices'  => [
-                        '1' => 'accepted',
-                        '2' => 'refused',
-                        '3' => 'refused',
-                        '4' => 'refused',
-                        '5' => 'refused',
+                        'Selectionner une note sur 5' => '',
+                        '1' => '1',
+                        '2' => '2',
+                        '3' => '3',
+                        '4' => '4',
+                        '5' => '5',
                     ],
+                    'required' => true,
                 ])
                 ->add('nom')
-                ->add('date_visite')
+                ->add('date_visite', DateType::class, [
+                    'widget' => 'single_text',
+                ])
                 ->add('titre')
                 ->add('commentaire')
             ;

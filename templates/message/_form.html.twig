@@ -1,4 +1,22 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<div class="row g-3 p-3">
+    <div class="col-md-6">
+        {{ form_row(form.nom, { label: 'Votre nom'}) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.telephone, { label: 'Votre numéro de téléphone'}) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.email, { label: 'Votre adresse email'}) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.sujet, { label: 'Sujet de votre demande'}) }}
+    </div>
+    <div class="col-md-12">
+        {{ form_row(form.message, { label: 'Votre message'}) }}
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    </div>
+</div>
 {{ form_end(form) }}

@@ -1,0 +1,23 @@
+{{ form_start(form) }}
+<div class="row g-3 p-3">
+    <div class="col-md-12">
+        {{ form_row(form.note, { label: 'Quelle note donneriez-vous à votre expérience ?'}) }}
+    </div>
+    <div class="col-md-12">
+        {{ form_row(form.nom, { label: 'Quel est votre nom ?'}) }}
+    </div>
+    <div class="col-md-12">
+        {{ form_row(form.date_visite, { label: 'À quelle date êtes-vous venu ?'}) }}
+    </div>
+    <div class="col-md-12">
+        {{ form_row(form.titre, { label: 'Donnez un titre à votre avis'}) }}
+    </div>
+    <div class="col-md-12">
+        {{ form_row(form.commentaire, { label: 'Ajoutez votre commentaire'}) }}
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Envoyer votre avis</button>
+    </div>
+
+</div>
+{{ form_end(form) }}

@@ -5,6 +5,7 @@
 {% block content %}
     <h1 class="text-center p-3">Bienvenue {{ app.user.prenom }} dans votre espace pro </h1>
     <div class="row">
+        {% if is_granted('ROLE_ADMIN') %}
         <div class="col-sm-6 mb-3 mb-sm-0 pb-3">
             <div class="card">
                 <div class="card-body">
@@ -29,6 +30,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         <div class="col-sm-6 mb-3 mb-sm-0 pb-3">
             <div class="card">
                 <div class="card-body">
