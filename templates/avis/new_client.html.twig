@@ -5,8 +5,8 @@
 {% block main %}
     <main>
         <div class="container p-3 rounded">
-            <div class="row fw-bolder align-items-stretch" style="background-color: #f0c542; color: #24393e;">
-                <div class="col-4 rounded d-flex align-items-center justify-content-center flex-column" style="background-color: #24393e; color: #f0c542;">
+            <div class="row fw-bolder align-items-stretch rounded" style="background-color: #f0c542; color: #24393e;">
+                <div class="col-sm-4 py-3 py-lg-2 rounded d-flex align-items-center justify-content-center flex-column order-1 order-sm-0" style="background-color: #24393e; color: #f0c542;">
                     <div>
                         <h2 class="d-inline-block ps-3 pb-3">Dites nous, comment s'est passé votre visite ?</h2>
                     </div>
@@ -14,7 +14,7 @@
                         <img src="{{ asset('assets/logo-garage.png') }}" style="width: 120px;"/>
                     </div>
                 </div>
-                <div class="col-8 rounded" >
+                <div class="col-sm-8 rounded" >
                     {{ include('avis/_form_client.html.twig') }}
                 </div>
             </div>

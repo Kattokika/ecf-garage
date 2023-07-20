@@ -8,23 +8,23 @@
             <h1 class="text-center">Contactez notre atelier</h1>
         </div>
         <div class="container p-3 rounded">
-            <div class="row fw-bolder align-items-stretch" style="background-color: #f0c542; color: #24393e;">
-                <div class="col-4 rounded d-flex align-items-center justify-content-center flex-column" style="background-color: #24393e; color: #f0c542;">
+            <div class="row fw-bolder align-items-stretch rounded" style="background-color: #f0c542; color: #24393e;">
+                <div class="col-sm-4 py-3 py-lg-2 rounded d-flex align-items-center justify-content-center flex-column order-1 order-sm-0" style="background-color: #24393e; color: #f0c542;">
                     <div>
                         <img src="{{ asset('assets/logo-garage.png') }}" style="width: 120px;"/>
                     </div>
                     <div>
-                        <i class="bi bi-telephone"></i><span class="d-inline-block ps-3 pb-3">05 71 52 01 86</span>
+                        <i class="bi bi-telephone"></i><span class="d-inline-block pb-3 ps-3">05 71 52 01 86</span>
                     </div>
                     <div class="text-center">
-                        <i class="bi bi-geo-alt"></i><span class="d-inline-block ps-3">74 rue de Georges,</span><br>
+                        <i class="bi bi-geo-alt"></i><span class="d-inline-block ps-3">74 rue de Georges</span><br>
                         <span>31000 Toulouse</span>
                     </div>
                     <div>
                         <i class="bi bi-envelope"></i><span class="d-inline-block ps-3 pt-3">contact@garagevparrot.fr</span>
                     </div>
                 </div>
-                <div class="col-8 rounded" >
+                <div class="col-sm-8 rounded" >
                     {{ include('message/_form.html.twig') }}
                 </div>
             </div>
