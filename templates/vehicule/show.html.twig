@@ -12,10 +12,6 @@
                 <td>{{ vehicule.id }}</td>
             </tr>
             <tr>
-                <th>Slug</th>
-                <td>{{ vehicule.slug }}</td>
-            </tr>
-            <tr>
                 <th>Marque</th>
                 <td>{{ vehicule.marque }}</td>
             </tr>
@@ -25,11 +21,11 @@
             </tr>
             <tr>
                 <th>Kilometre</th>
-                <td>{{ vehicule.kilometre }}</td>
+                <td>{{ vehicule.kilometre }}km</td>
             </tr>
             <tr>
                 <th>Prix</th>
-                <td>{{ vehicule.prix }}</td>
+                <td>{{ vehicule.prix }}€</td>
             </tr>
             <tr>
                 <th>Annee</th>
@@ -41,7 +37,7 @@
             </tr>
             <tr>
                 <th>Portes</th>
-                <td>{{ vehicule.portes }}</td>
+                <td>{{ vehicule.portes }} portes</td>
             </tr>
             <tr>
                 <th>Couleur</th>
@@ -49,14 +45,14 @@
             </tr>
             <tr>
                 <th>Puissance</th>
-                <td>{{ vehicule.puissance }}</td>
+                <td>{{ vehicule.puissance }}cv</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_vehicule_index') }}">back to list</a>
 
-    <a href="{{ path('app_vehicule_edit', {'id': vehicule.id}) }}">edit</a>
+    <a href="{{ path('app_vehicule_edit', {'slug': vehicule.slug}) }}">edit</a>
 
     {{ include('vehicule/_delete_form.html.twig') }}
 {% endblock %}

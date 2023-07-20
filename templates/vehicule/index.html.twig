@@ -8,8 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Slug</th>
                 <th>Marque</th>
                 <th>Modele</th>
                 <th>Kilometre</th>
@@ -19,14 +17,13 @@
                 <th>Portes</th>
                 <th>Couleur</th>
                 <th>Puissance</th>
+                <th>Carburant</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for vehicule in vehicules %}
             <tr>
-                <td>{{ vehicule.id }}</td>
-                <td>{{ vehicule.slug }}</td>
                 <td>{{ vehicule.marque }}</td>
                 <td>{{ vehicule.modele }}</td>
                 <td>{{ vehicule.kilometre }}</td>
@@ -36,9 +33,10 @@
                 <td>{{ vehicule.portes }}</td>
                 <td>{{ vehicule.couleur }}</td>
                 <td>{{ vehicule.puissance }}</td>
+                <td>{{ vehicule.carburant.type }}</td>
                 <td>
-                    <a href="{{ path('app_vehicule_show', {'id': vehicule.id}) }}">show</a>
-                    <a href="{{ path('app_vehicule_edit', {'id': vehicule.id}) }}">edit</a>
+                    <a href="{{ path('app_vehicule_show', {'slug': vehicule.slug}) }}">show</a>
+                    <a href="{{ path('app_vehicule_edit', {'slug': vehicule.slug}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

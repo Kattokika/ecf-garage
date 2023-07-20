@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 # TODO: add missing fields for vehicule
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
@@ -36,24 +37,34 @@ class Vehicule
     #[ORM\Column(length: 255)]
     private ?string $modele = null;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column]
     private ?int $kilometre = null;
-
+    #[Assert\PositiveOrZero]
     #[ORM\Column]
     private ?int $prix = null;
 
+    #[Assert\GreaterThan(1900)]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $annee = null;
-
+    #[Assert\Choice(
+        choices: ['Manuelle', 'Automatique'],
+        message: 'Choisir un type valide.',
+    )]
     #[ORM\Column(length: 32)]
     private ?string $boite = null;
 
+    #[Assert\Choice(
+        choices: ['3', '5'],
+        message: 'Choisir entre 3 et 5 portes.',
+    )]
     #[ORM\Column(length: 2)]
     private ?string $portes = null;
 
     #[ORM\Column(length: 32)]
     private ?string $couleur = null;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $puissance = null;
 
@@ -64,7 +75,7 @@ class Vehicule
 
     public function __toString(): string
     {
-        return $this->marque.' '.$this->modele.' '.$this->id;
+        return $this->marque.' '.$this->modele.' '.$this->annee.' '.$this->id;
     }
 
 

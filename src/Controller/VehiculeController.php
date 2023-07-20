@@ -11,10 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/vehicule')]
 class VehiculeController extends AbstractController
 {
-    #[Route('/', name: 'app_vehicule_index', methods: ['GET'])]
+    #[Route('/vehicules', name: 'app_vehicule_index', methods: ['GET'])]
     public function index(VehiculeRepository $vehiculeRepository): Response
     {
         return $this->render('vehicule/index.html.twig', [
@@ -22,7 +21,15 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_vehicule_new', methods: ['GET', 'POST'])]
+    #[Route('/espace-pro/vehicules', name: 'app_vehicule_index_pro', methods: ['GET'])]
+    public function index_pro(VehiculeRepository $vehiculeRepository): Response
+    {
+        return $this->render('vehicule/index.html.twig', [
+            'vehicules' => $vehiculeRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/espace-pro/vehicules/nouveau', name: 'app_vehicule_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $vehicule = new Vehicule();
@@ -42,7 +49,7 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_vehicule_show', methods: ['GET'])]
+    #[Route('/vehicules/{slug}', name: 'app_vehicule_show', methods: ['GET'])]
     public function show(Vehicule $vehicule): Response
     {
         return $this->render('vehicule/show.html.twig', [
@@ -50,7 +57,16 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_vehicule_edit', methods: ['GET', 'POST'])]
+    #[Route('/espace-pro/vehicules/{slug}', name: 'app_vehicule_show_pro', methods: ['GET'])]
+    public function show_pro(Vehicule $vehicule): Response
+    {
+        return $this->render('vehicule/show.html.twig', [
+            'vehicule' => $vehicule,
+        ]);
+    }
+
+
+    #[Route('/espace-pro/vehicules/{slug}/edit', name: 'app_vehicule_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(VehiculeType::class, $vehicule);
@@ -68,7 +84,7 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_vehicule_delete', methods: ['POST'])]
+    #[Route('/espace-pro/vehicules/{slug}', name: 'app_vehicule_delete', methods: ['POST'])]
     public function delete(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$vehicule->getId(), $request->request->get('_token'))) {
