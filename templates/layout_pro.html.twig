@@ -2,14 +2,11 @@
 
 {% block body %}
     {% block menu %}
-{#        TODO: nav-link active
-{% class="if app.request.attributes.get('_route') starts with 'book' %}active{% endif %}"
-#}
         {% set menu_entries = {
             'app_espace_pro': 'Accueil',
             'app_users': 'Employés',
             'app_service_index': 'Services',
-            'app_horaires_index2': 'Horaires d\'ouverture',
+            'app_horaires_edit': 'Horaires d\'ouverture',
             'app_vehicule_index_pro': 'Véhicules',
             'app_message_index': 'Messages clients',
             'app_avis_index': 'Gestion avis clients'

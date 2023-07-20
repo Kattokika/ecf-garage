@@ -9,7 +9,7 @@
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselGarage" data-bs-slide-to="0" class="active"
                             aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselGarage" data-bss-slide-to="1"
+                    <button type="button" data-bs-target="#carouselGarage" data-bs-slide-to="1"
                             aria-label="Slide 2"></button>
                     <button type="button" data-bs-target="#carouselGarage" data-bs-slide-to="2"
                             aria-label="Slide 3"></button>
@@ -94,7 +94,7 @@
                 {% set rounded_note = note_moyenne|round %}
                 {% set star = 'fill' %}
                 {% for i in range(1, 5) %}
-                    {% if i < rounded_note %}
+                    {% if i <= rounded_note %}
                         {% set star = '-fill' %}
                     {% elseif rounded_note < i < note_moyenne %}
                         {% set star = '-half' %}

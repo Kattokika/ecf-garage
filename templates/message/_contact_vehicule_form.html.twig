@@ -17,5 +17,8 @@
     <div class="col-12">
         <button type="submit" class="btn btn-primary">Envoyer</button>
     </div>
+    <input type="hidden" name="message[sujet]" value="{{ field_value(form.sujet) }}"/>
+    {% do form.sujet.setRendered() %}
+
 </div>
-{{ form_end(form, {'render_rest': false}) }}
+{{ form_end(form) }}

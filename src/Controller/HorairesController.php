@@ -16,16 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class HorairesController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/espace-pro/horaires', name: 'app_horaires_index', methods: ['GET'])]
-    public function index(HorairesRepository $horairesRepository): Response
-    {
-        return $this->render('horaires/index.html.twig', [
-            'horaires' => $horairesRepository->findAll(),
-        ]);
-    }
-
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/espace-pro/horaires-2', name: 'app_horaires_index2', methods: ['GET', 'POST'])]
+    #[Route('/espace-pro/horaires', name: 'app_horaires_edit', methods: ['GET', 'POST'])]
     public function index2(Request $request, HorairesRepository $horairesRepository, EntityManagerInterface $entityManager): Response
     {
         $horaires = $horairesRepository->findAll();
@@ -38,33 +29,15 @@ class HorairesController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            return $this->redirectToRoute('app_horaires_index2', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_horaires_edit', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('horaires/edit2.html.twig', [
+        return $this->render('horaires/edit.html.twig', [
             'list_horaires' => $horaires,
             'form' => $form,
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/espace-pro/horaires/{id}/edit', name: 'app_horaires_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Horaires $horaire, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(HorairesType::class, $horaire);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_horaires_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('horaires/edit.html.twig', [
-            'horaire' => $horaire,
-            'form' => $form,
-        ]);
-    }
     public function horaires(HorairesRepository $horairesRepository): Response
     {
         return $this->render('horaires/_horaires.html.twig', [
