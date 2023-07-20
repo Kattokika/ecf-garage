@@ -15,6 +15,7 @@
                 <th>Sujet</th>
                 <th>Message</th>
                 <th>Lu</th>
+                <th>Envoyé à</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -28,9 +29,9 @@
                 <td>{{ message.sujet }}</td>
                 <td>{{ message.message }}</td>
                 <td>{{ message.lu ? 'Yes' : 'No' }}</td>
+                <td>{{ message.sentAt ? message.sentAt|date('Y-m-d H:i:s', 'Europe/Paris') : '' }}</td>
                 <td>
                     <a href="{{ path('app_message_show', {'id': message.id}) }}">show</a>
-                    <a href="{{ path('app_message_edit', {'id': message.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -40,6 +41,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_message_new') }}">Create new</a>
 {% endblock %}

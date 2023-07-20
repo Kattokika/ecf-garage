@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Message
 {
     #[ORM\Id]
@@ -32,6 +33,14 @@ class Message
     #[ORM\Column]
     private ?bool $lu = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $sent_at = null;
+
+    #[ORM\PrePersist]
+    public function setSentAtValue(): void
+    {
+        $this->sent_at = new \DateTimeImmutable();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +114,18 @@ class Message
     public function setLu(bool $lu): static
     {
         $this->lu = $lu;
+
+        return $this;
+    }
+
+    public function getSentAt(): ?\DateTimeImmutable
+    {
+        return $this->sent_at;
+    }
+
+    public function setSentAt(\DateTimeImmutable $sent_at): static
+    {
+        $this->sent_at = $sent_at;
 
         return $this;
     }

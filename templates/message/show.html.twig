@@ -32,6 +32,10 @@
                 <td>{{ message.message }}</td>
             </tr>
             <tr>
+                <th>Envoyé à </th>
+                <td>{{ message.sentAt ? message.sentAt|date('Y-m-d H:i:s', 'Europe/Paris') : '' }}</td>
+            </tr>
+            <tr>
                 <th>Lu</th>
                 <td>{{ message.lu ? 'Yes' : 'No' }}</td>
             </tr>
@@ -39,8 +43,6 @@
     </table>
 
     <a href="{{ path('app_message_index') }}">back to list</a>
-
-    <a href="{{ path('app_message_edit', {'id': message.id}) }}">edit</a>
 
     {{ include('message/_delete_form.html.twig') }}
 {% endblock %}
