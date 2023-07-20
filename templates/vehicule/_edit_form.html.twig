@@ -1,0 +1,8 @@
+{{ form_start(form) }}
+    {% for photo in form.thumbnail %}
+        <li>{{ form_row(photo) }}</li>
+        <img src="{{ asset('uploads/photos/' ~ vehicule.photos[loop.index0].filename) }}" alt="test" height="50px" style="display: inline-block"/>
+    {% endfor %}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

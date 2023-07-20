@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer Photos Vehicule{% endblock %}
+
+{% block body %}
+    <h1>Sup photo vehicule</h1>
+    <script>
+        window.onload = function () {
+            document.querySelector("form").querySelectorAll("input[type=checkbox]").forEach(checkbox => checkbox.checked = false);
+        };
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                {{ include('vehicule/_delete_photos_form.html.twig', {'button_label': 'Supprimer'}) }}
+
+                <a href="{{ path('app_vehicule_index') }}">back to list</a>
+                <a href="{{ path('app_vehicule_edit', { slug: vehicule.slug }) }}">Editer le véhicule</a>
+
+                {{ include('vehicule/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

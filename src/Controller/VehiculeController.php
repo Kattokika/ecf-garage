@@ -6,8 +6,10 @@ use App\Entity\Vehicule;
 use App\Entity\VehiculePhoto;
 use App\Form\VehiculeType;
 use App\Form\VehiculePhotoType;
+use App\Form\VehiculeTypeExtended;
+use App\Form\VehiculeTypeExtendedDeletePhoto;
 use App\Repository\VehiculeRepository;
-use App\Service\FileUploader;
+use App\Service\FileManager;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +17,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function PHPUnit\Framework\throwException;
+use Symfony\Component\Form\FormError;
 
 class VehiculeController extends AbstractController
 {
@@ -56,7 +58,7 @@ class VehiculeController extends AbstractController
     }
 
     #[Route('/espace-pro/vehicules/{slug}/photos', name: 'app_vehicule_new_photos', methods: ['GET', 'POST'])]
-    public function new_photos(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    public function new_photos(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager, FileManager $fileUploader): Response
     {
         $vehiculePhoto = new VehiculePhoto();
         $vehiculePhoto->setVehicule($vehicule);
@@ -75,7 +77,6 @@ class VehiculeController extends AbstractController
              $pictureFilename = $fileUploader->upload($pictureFile);
              $vehiculePhoto->setFilename($pictureFilename);
              $vehiculePhoto->setVehicule($vehicule);
-             $vehiculePhoto->setPrincipale(false);
              $entityManager->persist($vehiculePhoto);
              $entityManager->flush();
 
@@ -85,13 +86,52 @@ class VehiculeController extends AbstractController
                  "testdata, should be good?",
                  $pictureFilename,
              ]]);
-             # $entityManager->persist($vehicule);
-             # $entityManager->flush();
 
              # return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
          }
 
         return $this->render('vehicule/new_photos.html.twig', [
+            'vehicule' => $vehicule,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/espace-pro/vehicules/{slug}/photos/delete', name: 'app_vehicule_delete_photos', methods: ['GET', 'POST'])]
+    public function delete_photos(
+        Request $request,
+        Vehicule $vehicule,
+        EntityManagerInterface $entityManager,
+    ): Response
+    {
+        $form = $this->createForm(VehiculeTypeExtendedDeletePhoto::class, null, [
+            'vehicule' => $vehicule,
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $photos = $form->get('pictures')->getData();
+            $thumbnail = $vehicule->getThumbnail();
+            foreach ($photos as $photo) {
+                if ($photo === $thumbnail) {
+                    $form->addError(new FormError(
+                        'Cette photo est la photo miniature. Veuillez d\'abord la changer.'
+                    ));
+                    return $this->render('vehicule/delete_photos.html.twig', [
+                        'vehicule' => $vehicule,
+                        'form' => $form,
+                    ]);
+                }
+
+                if (true === $vehicule->getPhotos()->contains($photo)) {
+                    $vehicule->removePhoto($photo);
+                }
+            }
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_vehicule_edit', ['slug' => $vehicule->getSlug()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('vehicule/delete_photos.html.twig', [
             'vehicule' => $vehicule,
             'form' => $form,
         ]);
@@ -114,17 +154,16 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-
     #[Route('/espace-pro/vehicules/{slug}/edit', name: 'app_vehicule_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(VehiculeType::class, $vehicule);
+        $form = $this->createForm(VehiculeTypeExtended::class, $vehicule);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
+            $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('vehicule/edit.html.twig', [

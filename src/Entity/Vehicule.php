@@ -68,6 +68,9 @@ class Vehicule
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $puissance = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?VehiculePhoto $thumbnail = null;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -77,7 +80,6 @@ class Vehicule
     {
         return $this->marque.' '.$this->modele.' '.$this->annee.' '.$this->id;
     }
-
 
     public function getId(): ?int
     {
@@ -248,6 +250,18 @@ class Vehicule
     public function setPuissance(int $puissance): static
     {
         $this->puissance = $puissance;
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?VehiculePhoto
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?VehiculePhoto $thumbnail): static
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

@@ -16,9 +16,6 @@ class VehiculePhoto
     #[ORM\Column(length: 255)]
     private ?string $filename = null;
 
-    #[ORM\Column]
-    private ?bool $principale = null;
-
     #[ORM\ManyToOne(inversedBy: 'photos')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Vehicule $vehicule = null;
@@ -36,18 +33,6 @@ class VehiculePhoto
     public function setFilename(string $filename): static
     {
         $this->filename = $filename;
-
-        return $this;
-    }
-
-    public function isPrincipale(): ?bool
-    {
-        return $this->principale;
-    }
-
-    public function setPrincipale(bool $principale): static
-    {
-        $this->principale = $principale;
 
         return $this;
     }
