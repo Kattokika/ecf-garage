@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\PasswordGenerator;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +31,6 @@ class UserController extends AbstractController
     public function show(Request $request, User $user): Response
     {
         $form = $this->createForm(UserType::class, $user);
-        $form->remove('password');
         $form->handleRequest($request);
         # TODO: flash a message to confirm the action
         if ($form->isSubmitted() && $form->isValid()) {
@@ -46,14 +46,18 @@ class UserController extends AbstractController
     }
 
     #[Route('/users/nouveau', name: 'app_new_user', priority: 2)]
-    public function create(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    public function create(
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher,
+        PasswordGenerator $passwordGenerator,
+    ): Response
     {   $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         # TODO: flash a message to confirm the action
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $plaintextPassword = $user->getPassword();
+            $plaintextPassword = $passwordGenerator->generate_password();
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
                 $plaintextPassword,
@@ -62,7 +66,10 @@ class UserController extends AbstractController
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-            return $this->redirectToRoute('app_users');
+            return $this->render('user/user-succes.html.twig', [
+                'user' => $user,
+                'plaintext_password' => $plaintextPassword,
+            ]);
         }
 
         return $this->render('user/index.html.twig', [
@@ -70,13 +77,4 @@ class UserController extends AbstractController
             'user_form' => $form,
         ]);
     }
-
-    # #[Route('/conference/{id}', name: 'conference')]
-    # public function show(Environment $twig, Conference $conference, CommentRepository $commentRepository): Response
-    # {
-    #    return new Response($twig->render('conference/show.html.twig', [
-    #        'conference' => $conference,
-    #        'comments' => $commentRepository->findBy(['conference' => $conference], ['createdAt' => 'DESC']),
-    #    ]));
-    # }
 }

@@ -1,0 +1,11 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block container %}
+    <h1>Utilisateur créé! {{ user.nom }} {{ user.prenom }}! ✅</h1>
+    <h2>Veuillez conserver et communiquer ce mot de passe sécurisé: {{ plaintext_password }}</h2>
+    <div>
+        <a href="{{ path('app_users') }}">Retourner à la page des utilisateurs</a>
+    </div>
+{% endblock %}
