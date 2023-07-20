@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Message;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,9 +17,25 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MessageRepository extends ServiceEntityRepository
 {
+    public const MESSAGES_PER_PAGE = 2;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Message::class);
+    }
+
+    public function getMessagePaginator(int $page, ?bool $onlyNonLu = false): Paginator
+    {
+        $offset = ($page- 1) * self::MESSAGES_PER_PAGE;
+        $builder = $this->createQueryBuilder('m')
+            ->orderBy('m.sent_at', 'DESC')
+            ->setMaxResults(self::MESSAGES_PER_PAGE)
+            ->setFirstResult($offset)
+        ;
+        if ($onlyNonLu) {
+            $builder->andWhere('m.lu = false');
+        }
+
+        return new Paginator($builder->getQuery());
     }
 
 //    /**

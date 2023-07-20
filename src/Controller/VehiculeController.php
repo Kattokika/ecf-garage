@@ -27,6 +27,7 @@ class VehiculeController extends AbstractController
         $form = $this->createForm(FilterVehiculeType::class, null, [
             'action' => $this->generateUrl('app_vehicule_index'),
             'method' => 'GET',
+            'crsf'
         ]);
         $form->handleRequest($request);
         $page = $request->query->get('page', 1);

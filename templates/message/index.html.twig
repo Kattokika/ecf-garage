@@ -2,9 +2,28 @@
 
 {% block title %}Message index{% endblock %}
 
+{% set queryParams = app.request.query.all %}
 {% block body %}
+    <script>
+        window.onload = function () {
+            const pageField = document.querySelector('#form_showUnread')
+            const form = document.querySelector('form');
+            pageField.addEventListener('change', function () {
+                pageField.value = '1';
+                form.submit();
+            });
+        }
+        // TODO: we can simply submit the format if the switch changes!!
+    </script>
     <h1>Message index</h1>
-
+    <div>There are {{ messages|length }} messages.</div>
+    <div class="row">
+        <div class="col-6">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -41,4 +60,11 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {% if previous >= 1 %}
+        <a href="{{ path('app_message_index', queryParams|merge({page: previous})) }}">Previous</a>
+    {% endif %}
+    {% if next != 0 %}
+        <a href="{{ path('app_message_index', queryParams|merge({page: next})) }}">Next</a>
+    {% endif %}
 {% endblock %}
