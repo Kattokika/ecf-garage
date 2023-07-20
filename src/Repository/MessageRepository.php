@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Message;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -36,6 +38,27 @@ class MessageRepository extends ServiceEntityRepository
         }
 
         return new Paginator($builder->getQuery());
+    }
+
+
+    /**
+     * @return int Returns the count of Message where the 'lu' is false
+     */
+    public function getUnreadAmount(): int
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            "SELECT COUNT(m.id) as cnt_notes
+            FROM App\Entity\Message m
+            WHERE m.lu = false"
+        );
+
+        // returns the count of Message where the 'lu' is false
+        try {
+            return (int)$query->getSingleScalarResult();
+        } catch (NoResultException|NonUniqueResultException $e) {
+            return 0;
+        }
     }
 
 //    /**

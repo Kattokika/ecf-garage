@@ -1,51 +1,80 @@
 {% extends 'layout_pro.html.twig' %}
 
-{% block title %}Avis index{% endblock %}
-
-{% block body %}
-    <h1>Avis index</h1>
-
-    <table class="table">
-        <thead>
+{% block title %}Liste des avis{% endblock %}
+{% set queryParams = app.request.query.all %}
+{% block content %}
+    <script>
+        window.onload = function () {
+            const pageField = document.querySelector('#form_showAll')
+            const form = document.querySelector('form');
+            pageField.addEventListener('change', function () {
+                pageField.value = '1';
+                form.submit();
+            });
+        }
+    </script>
+    <h1 class="text-center p-3">Liste des avis</h1>
+    <div class="row justify-content-around d-flex align-content-center">
+        <div class="col-6">
+            {{ form_start(form) }}
+            {{ form_widget(form, {'label': 'Montrer tous les avis'}) }}
+            {{ form_end(form) }}
+        </div>
+        <div class="col-6 text-end">
+            <a href="{{ path('app_avis_new') }}" class="btn btn-primary">Ajouter un avis</a>
+        </div>
+    </div>
+    {% set map_label = {
+        'submitted': 'A valider',
+        'accepted': 'Publié',
+        'refused': 'Refusé'
+    } %}
+    <div>
+        <table class="table">
+            <thead>
             <tr>
-                <th>Id</th>
-                <th>Note</th>
-                <th>Nom</th>
-                <th>Date_visite</th>
-                <th>Titre</th>
-                <th>Commentaire</th>
-                <th>Reponse</th>
-                <th>Status</th>
-                <th>actions</th>
+                <th scope="col">Status</th>
+                <th scope="col">Nom client</th>
+                <th scope="col">Note</th>
+                <th scope="col">Date visite</th>
+                <th scope="col"></th>
             </tr>
-        </thead>
-        <tbody>
-        {% for avi in avis %}
-            <tr>
-                <td>{{ avi.id }}</td>
-                <td>{{ avi.note }}</td>
-                <td>{{ avi.nom }}</td>
-                <td>{{ avi.dateVisite ? avi.dateVisite|date('Y-m-d') : '' }}</td>
-                <td>{{ avi.titre }}</td>
-                <td>{{ avi.commentaire }}</td>
-                <td>{{ avi.reponse }}</td>
-                <td>{{ avi.status }}</td>
-                <td>
-                    <a href="{{ path('app_avis_show', {'id': avi.id}) }}">show</a>
-                    <a href="{{ path('app_avis_edit', {'id': avi.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for avi in avis %}
+                <tr>
+                    <th scope="row">{{ map_label[avi.status]|default('-') }}</th>
+                    <td> {{ avi.nom }}</td>
+                    <td>{{ avi.note }}/5</td>
+                    <td>{{ avi.dateVisite ? avi.dateVisite|date('Y-m-d') : '' }}</td>
+                    <td class="d-md-flex justify-content-md-end">
+                        <a href="{{ path('app_avis_edit', {'id': avi.id}) }}" class="btn btn-primary me-2">Ouvrir</a>
+                        {{ include('avis/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Pas d'avis</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <a href="{{ path('app_avis_new') }}">Create new</a>
+    <div class="d-flex justify-content-between">
+        <div>
+        {% if previous >= 1 %}
+            <a href="{{ path('app_avis_index', queryParams|merge({page: previous})) }}" class="btn btn-primary">Précedente</a>
+        {% endif %}
+        </div>
+        <div>
+        {% if next != 0 %}
+            <a href="{{ path('app_avis_index', queryParams|merge({page: next})) }}" class="btn btn-primary">Suivante</a>
+        {% endif %}
+        </div>
+    </div>
+{#    {{ render(controller(#}
+{#        'App\\Controller\\AvisController::derniers_avis', {max: 3}#}
+{#    )) }}#}
 
-    {{ render(controller(
-        'App\\Controller\\AvisController::derniers_avis', {max: 3}
-    )) }}
 {% endblock %}

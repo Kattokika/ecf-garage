@@ -13,7 +13,6 @@
                 form.submit();
             });
         }
-        // TODO: we can simply submit the format if the switch changes!!
     </script>
 
     <h1 class="text-center p-3">Liste des messages</h1>
@@ -59,11 +58,16 @@
             </tbody>
         </table>
     </div>
-
-    {% if previous >= 1 %}
-        <a href="{{ path('app_message_index', queryParams|merge({page: previous})) }}">Previous</a>
-    {% endif %}
-    {% if next != 0 %}
-        <a href="{{ path('app_message_index', queryParams|merge({page: next})) }}">Next</a>
-    {% endif %}
+    <div class="d-flex justify-content-between">
+        <div>
+            {% if previous >= 1 %}
+                <a href="{{ path('app_message_index', queryParams|merge({page: previous})) }}" class="btn btn-primary">Précedente</a>
+            {% endif %}
+        </div>
+        <div>
+            {% if next != 0 %}
+                <a href="{{ path('app_message_index', queryParams|merge({page: next})) }}" class="btn btn-primary">Suivante</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

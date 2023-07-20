@@ -15,7 +15,15 @@ class AvisType extends AbstractType
         if (!$options['valider_avis']) {
             # The formulaire est nécessaire pour le client
             $builder
-                ->add('note')
+                ->add('note', ChoiceType::class, [
+                    'choices'  => [
+                        '1' => 'accepted',
+                        '2' => 'refused',
+                        '3' => 'refused',
+                        '4' => 'refused',
+                        '5' => 'refused',
+                    ],
+                ])
                 ->add('nom')
                 ->add('date_visite')
                 ->add('titre')

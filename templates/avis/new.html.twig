@@ -1,11 +1,10 @@
 {% extends 'layout_pro.html.twig' %}
 
-{% block title %}New Avis{% endblock %}
+{% block title %}Nouvel Avis Client{% endblock %}
 
-{% block body %}
-    <h1>Create new Avis</h1>
+{% block content %}
+    <h1 class="text-center p-3">Nouvel Avis Client</h1>
 
-    {{ include('avis/_form.html.twig') }}
+    {{ include('avis/_form.html.twig', { button_label: 'Créer', back_button: true}) }}
 
-    <a href="{{ path('app_avis_index') }}">back to list</a>
 {% endblock %}

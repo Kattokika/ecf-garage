@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Entity\Avis;
 use App\Form\AvisType;
 use App\Repository\AvisRepository;
+use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,10 +17,39 @@ use Symfony\Component\Routing\Annotation\Route;
 class AvisController extends AbstractController
 {
     #[Route('/espace-pro/avis', name: 'app_avis_index', methods: ['GET'])]
-    public function index(AvisRepository $avisRepository): Response
+    public function index(Request $request, AvisRepository $avisRepository): Response
     {
+        $form = $this->createFormBuilder(null, ['csrf_protection' => false])
+            ->setAction($this->generateUrl('app_avis_index'))
+            ->setMethod('GET')
+            ->add('showAll', CheckboxType::class, [
+                'required' => false,
+                'label_attr' => [
+                    'class' => 'checkbox-switch',
+                ],
+                'label' => 'Montrer tous les avis'
+            ])
+            ->add('page', HiddenType::class, [
+                'required'=> false,
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $page = $request->query->get('page', 1);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $paginator = $avisRepository->getAvisPaginator($page, $form->getData()['showAll']);
+        } else {
+            $paginator = $avisRepository->getAvisPaginator($page);
+        }
+        $next = count($paginator) < AvisRepository::AVIS_PER_PAGE * $page + 1 ? 0 : $page + 1;
+
         return $this->render('avis/index.html.twig', [
-            'avis' => $avisRepository->findAll(),
+            'avis' => $paginator,
+            'form' => $form,
+            'previous' => $page - 1,
+            'next' => $next,
         ]);
     }
 

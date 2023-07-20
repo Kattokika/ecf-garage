@@ -1,13 +1,23 @@
 {% extends 'layout_pro.html.twig' %}
 
-{% block title %}Edit Avis{% endblock %}
+{% block title %}Avis Client{% endblock %}
 
-{% block body %}
-    <h1>Edit Avis</h1>
+{% block content %}
+    <h1 class="text-center p-3">Avis Client</h1>
+    <div>
+        <span>Nom du client: {{ avis.nom }}</span>
+    </div>
+    <div>
+        <span>Date de la visite: {{ avis.dateVisite ? avis.dateVisite|date('Y-m-d') : '' }}</span>
+    </div>
+    <div>
+        <span>Titre: {{ avis.titre }}</span>
+    </div>
+    <div>
+        <span>Message:</span>
+        <p>{{ avis.commentaire }}</p>
+    </div>
 
-    {{ include('avis/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('avis/_form.html.twig', { button_label: 'Valider', back_button: true}) }}
 
-    <a href="{{ path('app_avis_index') }}">back to list</a>
-
-    {{ include('avis/_delete_form.html.twig') }}
 {% endblock %}

@@ -6,6 +6,7 @@ use App\Entity\Avis;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -18,6 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AvisRepository extends ServiceEntityRepository
 {
+    public const AVIS_PER_PAGE = 2;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Avis::class);
@@ -39,6 +41,26 @@ class AvisRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return int Returns the count of Avis where the 'status' is "submitted"
+     */
+    public function getSubmittedAmount(): int
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            "SELECT COUNT(a.id) as cnt_notes
+            FROM App\Entity\Avis a
+            WHERE a.status = 'submitted'"
+        );
+
+        // returns the count of Avis where the status is "submitted"
+        try {
+            return (int)$query->getSingleScalarResult();
+        } catch (NoResultException|NonUniqueResultException $e) {
+            return 0;
+        }
+    }
+
+    /**
      * @return int Returns the average of Avis 'note' where the 'status' is "accepted"
      */
     public function getAverageRate(): int
@@ -57,6 +79,23 @@ class AvisRepository extends ServiceEntityRepository
         } catch (NoResultException|NonUniqueResultException $e) {
             return 0;
         }
+    }
+
+    public function getAvisPaginator(int $page, ?bool $showAll = false): Paginator
+    {
+        $offset = ($page - 1) * self::AVIS_PER_PAGE;
+        $builder = $this->createQueryBuilder('m')
+            ->orderBy('m.date_visite', 'DESC')
+            ->setMaxResults(self::AVIS_PER_PAGE)
+            ->setFirstResult($offset)
+        ;
+        if (!$showAll) {
+            $builder->andWhere('m.status = :status')
+                ->setParameter('status', 'submitted')
+            ;
+        }
+
+        return new Paginator($builder->getQuery());
     }
 
 //    /**
