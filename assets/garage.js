@@ -2,12 +2,12 @@ import './styles/garage.css';
 
 import { Carousel } from 'bootstrap'
 
-const menu = document.querySelector(".menu")
-const navLinks = document.querySelector(".nav-links")
+// const menu = document.querySelector(".menu")
+// const navLinks = document.querySelector(".nav-links")
 
-menu.addEventListener('click', () => {
-    navLinks.classList.toggle('mobile-menu')
-})
+// menu.addEventListener('click', () => {
+//     navLinks.classList.toggle('mobile-menu')
+// })
 
 const myCarouselElement = document.querySelector('#carouselGarage')
 if (myCarouselElement) {

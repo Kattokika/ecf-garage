@@ -10,3 +10,18 @@ import './styles/app.css';
 import './styles/global.scss';
 
 require('bootstrap');
+
+const menu = document.querySelector(".menu")
+const navLinks = document.querySelector(".nav-links")
+const menuPro = document.querySelector(".menu-backdrop-2")
+const main = document.querySelector("main")
+
+menu.addEventListener('click', () => {
+    if (navLinks) {
+        navLinks.classList.toggle('mobile-menu')
+    }
+    if (menuPro) {
+        menuPro.classList.toggle('mobile-menu')
+        menuPro.classList.toggle('d-none')
+    }
+})
