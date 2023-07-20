@@ -5,58 +5,45 @@
 {#        TODO: nav-link active
 {% class="if app.request.attributes.get('_route') starts with 'book' %}active{% endif %}"
 #}
-        <aside class="d-flex flex-column flex-shrink-0 p-3 " style="width: 280px; height: 100vh; background-color: #24393e;">
-            <div class="d-flex justify-content-center mb-3 mb-md-0">
-                <img src="{{ asset('assets/logo-garage.png') }}" style="width: 120px;" />
-            </div>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="{{ path('app_espace_pro') }}" class="nav-link active" aria-current="page">
-                        Accueil
+        {% set menu_entries = {
+            'app_espace_pro': 'Accueil',
+            'app_users': 'Employés',
+            'app_service_index': 'Services',
+            'app_horaires_index2': 'Horaires d\'ouverture',
+            'app_vehicule_index_pro': 'Véhicules',
+            'app_message_index': 'Messages clients',
+            'app_avis_index': 'Gestion avis clients'
+        } %}
+
+        {% if not is_granted('ROLE_ADMIN') %}
+            {% set menu_entries = menu_entries|slice(0, 4) %}
+        {% endif %}
+        <div class="d-flex flex-nowrap">
+            <aside class="d-flex flex-column flex-shrink-0 p-3" style="width: 280px; height: 100vh; background-color: #24393e;">
+                <div class="d-flex justify-content-center mb-3 mb-md-0">
+                    <img src="{{ asset('assets/logo-garage.png') }}" style="width: 120px;"  alt="logo-garage" />
+                </div>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    {% for menu_route, label in menu_entries %}
+                        <li class="nav-item">
+                            <a href="{{ path(menu_route) }}" class="text-white nav-link {% if app.request.attributes.get('_route') starts with menu_route|split('_')|slice(0, 2)|join('_') %}active{% endif %}" aria-current="page">
+                                {{ label }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <hr>
+                <div class="deco">
+                    <a href="{{ path('app_logout') }}" class="d-flex align-items-center text-white text-decoration-none">
+                        Se déconnecter
                     </a>
-                </li>
-                {% if is_granted('ROLE_ADMIN') %}
-                <li>
-                    <a href="{{ path('app_users') }}" class="nav-link text-white">
-                        Employés
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('app_service_index') }}" class="nav-link text-white">
-                        Services
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('app_horaires_index2') }}" class="nav-link text-white">
-                        Horaires d'ouverture
-                    </a>
-                </li>
-                {% endif %}
-                <li>
-                    <a href="{{ path('app_vehicule_index_pro') }}" class="nav-link text-white">
-                        Véhicules
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('app_message_index') }}" class="nav-link text-white">
-                        Messages clients
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('app_avis_index') }}" class="nav-link text-white">
-                        Gestion avis clients
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <div class="deco">
-                <a href="{{ path('app_logout') }}" class="d-flex align-items-center text-white text-decoration-none">
-                    Se déconnecter
-                </a>
-            </div>
-        </aside>
-    {% endblock %}
-    {% block content %}
-    {% endblock %}
+                </div>
+            </aside>
+        {% endblock %}
+        <main class="container">
+        {% block content %}
+        {% endblock %}
+        </main>
+    <div class="d-flex flex-nowrap">
 {% endblock %}

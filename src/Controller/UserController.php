@@ -17,19 +17,19 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        private readonly EntityManagerInterface $entityManager,
     ) {}
     #[Route('/users', name: 'app_users')]
     public function index(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();
-        return $this->render('user/list-users.html.twig', [
+        return $this->render('user/index.html.twig', [
             'users' => $users,
         ]);
     }
 
     #[Route('/users/{id}', name: 'app_user')]
-    public function show(Request $request, User $user): Response
+    public function edit(Request $request, User $user): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -40,9 +40,9 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_users');
         }
 
-        return $this->render('user/index.html.twig', [
+        return $this->render('user/edit.html.twig', [
             'user' => $user,
-            'user_form' => $form,
+            'form' => $form,
         ]);
     }
 
@@ -73,9 +73,9 @@ class UserController extends AbstractController
             ]);
         }
 
-        return $this->render('user/index.html.twig', [
+        return $this->render('user/new.html.twig', [
             'user' => $user,
-            'user_form' => $form,
+            'form' => $form,
         ]);
     }
 }
