@@ -53,24 +53,23 @@
         <div class="p-3">
             <div class="text-center">
                 <h2>DÉCOUVREZ LES PRESTATIONS PROPOSÉES PAR LES RÉPARATEURS DU GARAGE V.PARROT</h2>
-                <span class="fs-5">Nos réparateurs s’occupent de la réparation et l’entretien de votre voiture, peu importe la marque
-                    ou le modèle de celle-ci.
-                    <br>Profitez d’une prestation de qualité effectuée par des véritables experts auto.
+                <span class="fs-5">Nos réparateurs s’occupent de la réparation et l’entretien de votre voiture, peu importe la marque ou le modèle de celle-ci.
+                    <br>
+                    Profitez d’une prestation de qualité effectuée par des véritables experts auto.
                 </span>
             </div>
         </div>
         <div class="d-md-flex justify-content-center p-3" style="background-color: #24393e;">
             <div id="carouselServices" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
-                        {{ render(controller('App\\Controller\\ServiceController::services')) }}
+                    {{ render(controller('App\\Controller\\ServiceController::services')) }}
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselServices"
                         data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselServices"
-                        data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselServices" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>

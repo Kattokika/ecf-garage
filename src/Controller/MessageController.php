@@ -94,4 +94,18 @@ class MessageController extends AbstractController
 
         return $this->redirectToRoute('app_message_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    public function contact_voiture(string $sujet): Response
+    {
+        $message = new Message();
+        $message->setSujet($sujet);
+        $form = $this->createForm(MessageType::class, $message, [
+            'action' => $this->generateUrl('app_message_new'),
+        ]);
+
+        return $this->render('message/_contact_vehicule_form.html.twig', [
+            'message' => $message,
+            'form' => $form,
+        ]);
+    }
 }
