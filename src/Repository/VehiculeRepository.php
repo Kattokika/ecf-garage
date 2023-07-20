@@ -18,7 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VehiculeRepository extends ServiceEntityRepository
 {
-    public const VEHICULES_PER_PAGE = 4;
+    public const VEHICULES_PER_PAGE = 9;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Vehicule::class);
