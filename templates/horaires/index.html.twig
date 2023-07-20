@@ -8,34 +8,34 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Position</th>
-                <th>Nom_jour</th>
-                <th>Ouverture</th>
+                <th>Jour</th>
                 <th>Horaires</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for horaire in horaires %}
             <tr>
-                <td>{{ horaire.id }}</td>
-                <td>{{ horaire.position }}</td>
                 <td>{{ horaire.nomJour }}</td>
-                <td>{{ horaire.ouverture ? 'Yes' : 'No' }}</td>
-                <td>{{ horaire.horaires ? horaire.horaires|join(', ') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_horaires_show', {'id': horaire.id}) }}">show</a>
-                    <a href="{{ path('app_horaires_edit', {'id': horaire.id}) }}">edit</a>
+                    {% if horaire.ouverture == false %}
+                        Fermé
+                    {% else %}
+                        {% for slot in horaire.horaires|batch(2, 'Fermé') %}
+                            {% if loop.first == false %}
+                                <br/>
+                            {% endif %}
+                            {% if slot[loop.index] != '00:00:00' %}
+                                {{ slot ? slot|map(p => "#{p|slice(0, 5)}")|join(' à ') : ''}}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">Pas d'horaires enregistrées</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_horaires_new') }}">Create new</a>
 {% endblock %}

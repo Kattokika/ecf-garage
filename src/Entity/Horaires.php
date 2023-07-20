@@ -23,7 +23,7 @@ class Horaires
     #[ORM\Column]
     private ?bool $ouverture = null;
 
-    #[ORM\Column(type: Types::ARRAY)]
+    #[ORM\Column(type: Types::JSON)]
     private array $horaires = [];
 
     public function getId(): ?int
@@ -78,4 +78,25 @@ class Horaires
 
         return $this;
     }
+
+    public function getHorairesFromIndex(int $index): ?string
+    {
+        if (count($this->horaires) < $index + 1) {
+            return null;
+        }
+        return $this->horaires[$index];
+    }
+
+
+//    public function addHoraires(string $horaire, int $index): static
+//    {
+//        $this->horaires[$index] = $horaire;
+//        return $this;
+//    }
+//
+//    public function removeHoraires(int $index): static
+//    {
+//        $this->horaires = array_splice($this->horaires, $index, 1);
+//        return $this;
+//    }
 }

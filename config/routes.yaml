@@ -6,4 +6,6 @@ controllers:
 
 app_logout:
     path: /logout
-    methods: POST
+    methods:
+        - POST
+        - GET

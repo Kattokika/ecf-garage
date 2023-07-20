@@ -6,6 +6,7 @@ use App\Entity\Avis;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class AvisType extends AbstractType
 {
@@ -25,7 +26,12 @@ class AvisType extends AbstractType
             # Ceci est le formulaire nécessaire à l'employé pour valider l'avis
             $builder
                 ->add('reponse')
-                ->add('status')
+                ->add('status', ChoiceType::class, [
+                    'choices'  => [
+                        'Accepté' => 'accepted',
+                        'Refusé' => 'refused',
+                    ],
+                ])
             ;
         }
     }

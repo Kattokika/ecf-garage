@@ -6,6 +6,7 @@ use App\Entity\Message;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 
 class MessageType extends AbstractType
 {
@@ -14,7 +15,7 @@ class MessageType extends AbstractType
         $builder
             ->add('nom')
             ->add('email')
-            ->add('telephone')
+            ->add('telephone', TelType::class)
             ->add('sujet')
             ->add('message')
         ;

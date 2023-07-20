@@ -25,11 +25,11 @@ class AvisController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $avis = new Avis();
+        $avis->setStatus("accepted");
         $form = $this->createForm(AvisType::class, $avis);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $avis->setStatus("accepted");
             $entityManager->persist($avis);
             $entityManager->flush();
 

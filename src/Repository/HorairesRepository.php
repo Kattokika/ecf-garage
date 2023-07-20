@@ -11,7 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method Horaires|null find($id, $lockMode = null, $lockVersion = null)
  * @method Horaires|null findOneBy(array $criteria, array $orderBy = null)
- * @method Horaires[]    findAll()
+ # * @method Horaires[]    findAll()
  * @method Horaires[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class HorairesRepository extends ServiceEntityRepository
@@ -19,6 +19,14 @@ class HorairesRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Horaires::class);
+    }
+
+    /**
+     * @return Horaires[] Returns an array of Horaires objects
+     */
+    public function findAll(): array
+    {
+        return $this->findBy([], ['position' => 'ASC']);
     }
 
 //    /**

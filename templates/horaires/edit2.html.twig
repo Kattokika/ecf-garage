@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Horaires{% endblock %}
+
+{% block body %}
+    <h1>Edit Horaires</h1>
+
+    {{ form_start(form) }}
+
+    <h3>Horaires</h3>
+    <ul class="horaires">
+        {% for horaire in form.horaires %}
+            {{ form_errors(horaire) }}
+            {{ form_row(horaire.ouverture, {label: false}) }}
+            {{ list_horaires[loop.index0].nomJour }}
+            {{ form_widget(horaire) }}
+        {% endfor %}
+    </ul>
+    <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+
+{% endblock %}
