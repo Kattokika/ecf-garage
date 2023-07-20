@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GarageController extends AbstractController
 {
-    #[Route('/', name: 'homepage')]
+    #[Route('/', name: 'app_homepage')]
     public function index(): Response
     {
         return $this->render('garage/index.html.twig', [

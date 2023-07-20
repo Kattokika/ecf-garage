@@ -18,6 +18,11 @@ class LoginController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        if ($this->isGranted('IS_AUTHENTICATED'))
+        {
+            return $this->redirectToRoute('app_espace_pro');
+        }
+
         return $this->render('login/index.html.twig', [
             #        'controller_name' => 'LoginController',
             'last_username' => $lastUsername,

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis{% endblock %}
+
+{% block body %}
+    <h1>Avis</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ avis.id }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ avis.note }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ avis.nom }}</td>
+            </tr>
+            <tr>
+                <th>Date_visite</th>
+                <td>{{ avis.dateVisite ? avis.dateVisite|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ avis.titre }}</td>
+            </tr>
+            <tr>
+                <th>Commentaire</th>
+                <td>{{ avis.commentaire }}</td>
+            </tr>
+            <tr>
+                <th>Reponse</th>
+                <td>{{ avis.reponse }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ avis.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_avis_index') }}">back to list</a>
+
+    <a href="{{ path('app_avis_edit', {'id': avis.id}) }}">edit</a>
+
+    {{ include('avis/_delete_form.html.twig') }}
+{% endblock %}
