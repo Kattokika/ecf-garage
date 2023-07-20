@@ -3,49 +3,38 @@
 {% block title %}Avis index{% endblock %}
 
 {% block body %}
-    <h1>Avis index</h1>
+    <h1>Derniers Avis</h1>
+
+    <h2>Notre moyenne {{ moyenne }}</h2>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Note</th>
                 <th>Nom</th>
                 <th>Date_visite</th>
                 <th>Titre</th>
                 <th>Commentaire</th>
                 <th>Reponse</th>
-                <th>Status</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for avi in avis %}
             <tr>
-                <td>{{ avi.id }}</td>
                 <td>{{ avi.note }}</td>
                 <td>{{ avi.nom }}</td>
                 <td>{{ avi.dateVisite ? avi.dateVisite|date('Y-m-d') : '' }}</td>
                 <td>{{ avi.titre }}</td>
                 <td>{{ avi.commentaire }}</td>
                 <td>{{ avi.reponse }}</td>
-                <td>{{ avi.status }}</td>
-                <td>
-                    <a href="{{ path('app_avis_show', {'id': avi.id}) }}">show</a>
-                    <a href="{{ path('app_avis_edit', {'id': avi.id}) }}">edit</a>
-                </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="9">no records found</td>
+                <td colspan="9">Pas encore d'avis</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_avis_new') }}">Create new</a>
-
-    {{ render(controller(
-        'App\\Controller\\AvisController::derniers_avis', {max: 3}
-    )) }}
+    <a href="{{ path('app_avis_client') }}">Donner son avis</a>
 {% endblock %}
