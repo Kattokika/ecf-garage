@@ -3,6 +3,7 @@ namespace App\Service;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Filesystem\Filesystem;
 
 class FileManager
 {
@@ -25,17 +26,20 @@ class FileManager
     }
 
 
-    public function remove(string $filename): string
+    public function remove(mixed $filenames): void
     {
-        $fileName = uniqid('picture-').'.'.$file->guessExtension();
-
-        try {
-            $file->move($this->getTargetDirectory(), $fileName);
-        } catch (FileException $e) {
-            // ... handle exception if something happens during file upload
+        if (!\is_array($filenames)) {
+            $filenames = [$filenames];
         }
+        $filesystem = new Filesystem();
 
-        return $fileName;
+        foreach ($filenames as $filename) {
+            $filepath = $this->getTargetDirectory() . '/' . $filename;
+
+            if ($filesystem->exists($filepath)) {
+                $filesystem->remove($filepath);
+            }
+        }
     }
 
     public function getTargetDirectory(): string

@@ -10,8 +10,8 @@ use App\Form\VehiculeTypeExtended;
 use App\Form\VehiculeTypeExtendedDeletePhoto;
 use App\Repository\VehiculeRepository;
 use App\Service\FileManager;
-use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\File;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +48,7 @@ class VehiculeController extends AbstractController
             $entityManager->persist($vehicule);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_vehicule_new_photos', ['slug' => $vehicule->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('vehicule/new.html.twig', [
@@ -58,7 +58,7 @@ class VehiculeController extends AbstractController
     }
 
     #[Route('/espace-pro/vehicules/{slug}/photos', name: 'app_vehicule_new_photos', methods: ['GET', 'POST'])]
-    public function new_photos(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager, FileManager $fileUploader): Response
+    public function new_photos(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager, FileManager $fileManager): Response
     {
         $vehiculePhoto = new VehiculePhoto();
         $vehiculePhoto->setVehicule($vehicule);
@@ -74,7 +74,7 @@ class VehiculeController extends AbstractController
                  ]]);
              }
 
-             $pictureFilename = $fileUploader->upload($pictureFile);
+             $pictureFilename = $fileManager->upload($pictureFile);
              $vehiculePhoto->setFilename($pictureFilename);
              $vehiculePhoto->setVehicule($vehicule);
              $entityManager->persist($vehiculePhoto);
@@ -101,12 +101,15 @@ class VehiculeController extends AbstractController
         Request $request,
         Vehicule $vehicule,
         EntityManagerInterface $entityManager,
+        FileManager $fileManager,
     ): Response
     {
         $form = $this->createForm(VehiculeTypeExtendedDeletePhoto::class, null, [
             'vehicule' => $vehicule,
         ]);
         $form->handleRequest($request);
+
+        $photosToDelete = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
             $photos = $form->get('pictures')->getData();
@@ -124,9 +127,13 @@ class VehiculeController extends AbstractController
 
                 if (true === $vehicule->getPhotos()->contains($photo)) {
                     $vehicule->removePhoto($photo);
+                    $photosToDelete[] = $photo->getFilename();
                 }
             }
             $entityManager->flush();
+            foreach ($photosToDelete as $filename) {
+                $fileManager->remove($filename);
+            }
 
             return $this->redirectToRoute('app_vehicule_edit', ['slug' => $vehicule->getSlug()], Response::HTTP_SEE_OTHER);
         }
@@ -173,13 +180,27 @@ class VehiculeController extends AbstractController
     }
 
     #[Route('/espace-pro/vehicules/{slug}', name: 'app_vehicule_delete', methods: ['POST'])]
-    public function delete(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager): Response
+    public function delete(
+        Request $request,
+        Vehicule $vehicule,
+        EntityManagerInterface $entityManager,
+        FileManager $fileManager,
+    ): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$vehicule->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$vehicule->getSlug(), $request->request->get('_token'))) {
+            $filenames = [];
+            foreach ($vehicule->getPhotos() as $photo) {
+                $filenames[] = $photo->getFilename();
+            }
+
+            $vehicule->removeAllPhotos();
+            $vehicule->setThumbnail(null);
+            $entityManager->flush();
+            # Relation cyclique entre vehicule et photos, on doit appeler flush 2 fois pour enlever les relations
             $entityManager->remove($vehicule);
             $entityManager->flush();
+            $fileManager->remove($filenames);
         }
-
         return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
     }
 }

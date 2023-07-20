@@ -68,7 +68,7 @@ class Vehicule
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $puissance = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'], orphanRemoval: true)]
     private ?VehiculePhoto $thumbnail = null;
 
     public function __construct()
@@ -110,6 +110,20 @@ class Vehicule
             // set the owning side to null (unless already changed)
             if ($photo->getVehicule() === $this) {
                 $photo->setVehicule(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeAllPhotos(): static
+    {
+        foreach ($this->photos as $photo) {
+            if ($this->photos->removeElement($photo)) {
+                // set the owning side to null (unless already changed)
+                if ($photo->getVehicule() === $this) {
+                    $photo->setVehicule(null);
+                }
             }
         }
 
