@@ -104,12 +104,7 @@
                     <i class="bi bi-star{{ star }}"></i>
                 {% endfor %}
             </div>
-            <div class="row p-3">
-                {{ render(controller('App\\Controller\\AvisController::derniers_avis', {max: 4})) }}
-            </div>
-            <div class="d-md-flex justify-content-center p-3">
-                <a class="btn btn-primary btn-lg" href="{{ path('app_avis_client') }}" role="button">Laisser votre avis</a>
-            </div>
+            {{ render(controller('App\\Controller\\AvisController::derniers_avis', {max: 10})) }}
         </div>
     </main>
 {% endblock %}

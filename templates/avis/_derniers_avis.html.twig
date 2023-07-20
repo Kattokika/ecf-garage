@@ -1,4 +1,5 @@
-{% for avi in avis %}
+<div class="row p-3">
+{% for avi in avis|slice(0,4) %}
     <div class="col-md-3">
         <div class="card">
             <div class="card-header">
@@ -22,4 +23,62 @@
             </div>
         </div>
     </div>
+{% else %}
+    <div class="col-12 text-center">
+        Pas encore d'avis enregistrés
+    </div>
 {% endfor %}
+</div>
+<div class="d-md-flex justify-content-center p-3">
+    {% set hasAvis = avis|length > 0 %}
+    {% if hasAvis %}
+    <button type="button" data-bs-toggle="modal" data-bs-target="#avisModal" class="btn btn-primary btn-lg me-2">Voir plus d'avis</button>
+    {% endif %}
+    <a class="btn btn-primary btn-lg {% if hasAvis %}ms-2{% endif %}" href="{{ path('app_avis_client') }}" role="button">Laisser votre avis</a>
+</div>
+{% if hasAvis %}
+<div class="modal fade" id="avisModal" tabindex="-1" aria-labelledby="avisModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Nos Avis</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="word-wrap: break-word;">
+                {% for avi in avis %}
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title fw-bold">{{ avi.nom }}</h5>
+                        <span>
+                            {% for i in range(1, 5) %}
+                                {% if i <= avi.note %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <strong>{{ avi.titre }}</strong>
+                        <span>le {{ avi.dateVisite ? avi.dateVisite|date('Y-m-d') : '' }}</span>
+                    </div>
+                    <p>
+                        {{ avi.commentaire }}
+                    </p>
+                    <br>
+                    {% if avi.reponse %}
+                        <strong>Réponse:</strong>
+                        <p>
+                            {{ avi.reponse }}
+                        </p>
+                    {% endif %}
+                    <hr>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
