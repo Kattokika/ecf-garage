@@ -18,14 +18,14 @@
             'app_avis_client': 'Laisser un avis',
             'app_message_new': 'Nous contacter',
         } %}
-        <header class=" d-flex justify-content-end">
-            <a class="logo position-absolute top-0 start-0" href="{{ path('app_homepage') }}">
-                <img src="{{ asset('assets/logo-garage.png') }}"  style="width: 120px;" alt="logo-garage"/>
-            </a>
-            <nav class="navbar justify-content-end" style="background-color: #24393e;">
+        <header style="height: 100px;">
+            <nav class="navbar justify-content-between w-100" style="background-color: #24393e;">
+                <a class="logo ps-3" href="{{ path('app_homepage') }}">
+                    <img src="{{ asset('assets/logo-garage.png') }}" alt="logo-garage" height="100"/>
+                </a>
                 <div>
-                    <div class="nav-links align-middle fs-5">
-                        <ul>
+                    <div class="nav-links fs-5">
+                        <ul class="mb-0 d-flex align-items-center">
                             {% for page_name, label in menu_entries %}
                                 <li>
                                     <a class="nav-link {% if app.request.attributes.get('_route') starts with page_name %}active{% endif %}" aria-current="page" href="{{ path(page_name) }}">
