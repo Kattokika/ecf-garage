@@ -39,13 +39,22 @@
     {% endfor %}
 </div>
 <div class="pt-3">
-    <div class="col-6">
+    <div class="col-12 justify-content-between d-flex">
+        <div class="d-inline-block">
         {% if cancel_button|default(false) %}
             <a href="{{ path('app_vehicule_index_pro') }}" class="btn btn-danger">
                 Annuler
             </a>
         {% endif %}
+
         <button type="submit" class="btn btn-primary">{{ button_label|default('Etape suivante') }}</button>
+        </div>
+        {% if edit_mode|default(false) %}
+
+        <a href="{{ path('app_vehicule_new_photos', { slug: vehicule.slug }) }}" class="btn btn-primary">
+            Ajouter des photos
+        </a>
+        {% endif %}
     </div>
 </div>
 {{ form_end(form) }}

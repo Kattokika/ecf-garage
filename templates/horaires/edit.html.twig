@@ -39,7 +39,9 @@
             </div>
         {% endfor %}
     </div>
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="text-end">
+        <button class="btn btn-primary me-3" style="width: 140px;">{{ button_label|default('Sauvegarder') }}</button>
+    </div>
     {{ form_end(form) }}
 
 {% endblock %}

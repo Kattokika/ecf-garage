@@ -6,6 +6,8 @@ services:
     environment:
       APP_SECRET: ${APP_SECRET}
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
+    volumes:
+      - /home/debian/photos:/srv/app/public/uploads/photos
 
   caddy:
     environment:
