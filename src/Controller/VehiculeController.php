@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Vehicule;
 use App\Entity\VehiculePhoto;
+use App\Form\FilterVehiculeType;
 use App\Form\VehiculeType;
 use App\Form\VehiculePhotoType;
 use App\Form\VehiculeTypeExtended;
@@ -11,7 +12,6 @@ use App\Form\VehiculeTypeExtendedDeletePhoto;
 use App\Repository\VehiculeRepository;
 use App\Service\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\File;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,8 +24,20 @@ class VehiculeController extends AbstractController
     #[Route('/vehicules', name: 'app_vehicule_index', methods: ['GET'])]
     public function index(VehiculeRepository $vehiculeRepository): Response
     {
+        $form = $this->createForm(FilterVehiculeType::class);
+        if ($form->isSubmitted() && $form->isValid()) {
+            # $queryBuilder = $vehiculeRepository->createQueryBuilder();
+            # $queryBuilder
+
+            $vehicule = $vehiculeRepository->findAll();
+
+        } else {
+            $vehicule = $vehiculeRepository->findAll();
+        }
+
         return $this->render('vehicule/index.html.twig', [
-            'vehicules' => $vehiculeRepository->findAll(),
+            'vehicules' => $vehicule,
+            'form' => $form,
         ]);
     }
 
