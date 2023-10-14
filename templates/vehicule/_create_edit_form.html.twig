@@ -26,7 +26,6 @@
     {% for row in form.children %}
         {% set isEquipement = row is same as(form.equipement) %}
         {% set isThumbnail = (hasThumbnail and row is same as(form.thumbnail)) %}
-        {{ isEquipement }} {{ isThumbnail }}
         {% if not isEquipement and not isThumbnail %}
             <div class="col-md-6 order-0">
                 {% if row.vars.name in map_label|keys %}

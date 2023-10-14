@@ -30,10 +30,14 @@ class VehiculeController extends AbstractController
         ]);
         $form->handleRequest($request);
         $page = $request->query->get('page', 1);
+        if (!$page) {
+            $page = 1;
+        }
         if ($form->isSubmitted() && $form->isValid())
         {
             $paginator = $vehiculeRepository->getVehiculePaginator($form->getData());
-        } else {
+        } else
+        {
             $paginator = $vehiculeRepository->getVehiculePaginator([
                 'page' => $page,
             ]);

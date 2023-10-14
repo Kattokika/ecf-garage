@@ -27,7 +27,7 @@ class VehiculeRepository extends ServiceEntityRepository
 
     public function getVehiculePaginator(array $filters = []): Paginator
     {
-        if (!array_key_exists("page", $filters)) {
+        if (!array_key_exists("page", $filters) || !$filters['page']) {
             $filters['page'] = 1;
         }
 
