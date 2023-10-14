@@ -141,8 +141,6 @@ class AvisController extends AbstractController
 
     public function derniers_avis(AvisRepository $avisRepository, ?int $max = 4): Response
     {
-        # TODO: ajouter valeur cachée pour la moyenne des avis validés
-        # invalider le cache quand un nouvel avis est validé
         return $this->render('avis/_derniers_avis.html.twig', [
             'avis' => $avisRepository->findAllByStatus('accepted', $max),
         ]);

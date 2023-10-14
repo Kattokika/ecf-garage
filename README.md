@@ -50,7 +50,7 @@ $ symfony run psql -c "INSERT INTO "user" (id, email, roles, password, nom, pren
 Ou directement depuis `psql`:
 ```bash
 $ psql -U app
-$ > INSERT INTO "user" (id, email, roles, password, nom, prenom, poste) VALUES (nextval('user_id_seq'), 'vincent@garageparrot.fr', '["ROLE_ADMIN"]', '$2y$13$XKW5tG4NoIXSLzgCy6B1w.EmXecq8InSoSlXDjJt2DA74Ugt5HHYi', 'PARROT', 'Vincent', 'Directeur');
+$ > INSERT INTO "user" (id, email, roles, password, nom, prenom, poste) VALUES (nextval('user_id_seq'), 'vincent@garageparrot.fr', '["ROLE_ADMIN"]', '$2y$13$i3som1ymIgHKL87qP7BN4.3dQuNvacMw99sRijs/QeVTCsZr06tmK', 'PARROT', 'Vincent', 'Directeur');
 ```
 
 ### Insérer des fausses données de test
@@ -60,3 +60,5 @@ Certains fichiers sont disponibles afin d'insérer des données de test pour fac
 $ psql -U app -d app -a -f ./tests/sql/horaires.sql
 $ psql -U app -d app -a -f ./tests/sql/vehicule_carburant.sql
 ```
+
+.\node_modules\.bin\encore dev --watch
