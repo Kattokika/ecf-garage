@@ -53,12 +53,12 @@
         </header>
     {% endblock %}
     {% block main %}
-        <main class="container-fluid p-3">
+        <main class="container-fluid p-0">
         </main>
     {% endblock %}
     {% block footer %}
 
-        <footer class="footer-page row py-4 border-top">
+        <footer class="footer-page row py-4 mx-0 border-top">
             <div class="col-sm-12 col-lg-4 py-sm-2 text-center">
                 <a class="logo" href="{{ path('app_homepage') }}">
                     <img src="{{ asset('assets/logo-garage.png') }}" style="width: 150px;" alt="logo-garage"/>
@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-12 col-lg-4 text-center justify-content-center">
+            <div class="col-sm-12 col-lg-4 text-center justify-content-center ">
 
                     {{ render(controller('App\\Controller\\HorairesController::horaires')) }}
 
